@@ -16,6 +16,20 @@ export default function Contact() {
         message: '',
     });
 
+    // --- UPDATE VALUES IN FORM ---
+    const handleChange = (e) => {
+
+        // Get the value and the input name from event
+        const { name, value } = e.target;
+
+        // Update formData with the new value in the input targeted 
+        setFormData(formData => ({
+            ...formData, // previous data in form data
+            [name] : value
+        }));
+
+    }
+
     return (
 
         <section>
@@ -31,6 +45,7 @@ export default function Contact() {
                             placeholder="Nom"
                             value={formData.name}
                             onChange={handleChange} 
+                            name
                         />
                     </div>
                 </fieldset>
