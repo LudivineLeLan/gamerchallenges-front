@@ -32,21 +32,51 @@ export default function Contact() {
 
     return (
 
-        <section>
+        <section
+            className=""
+        >
 
-            <h1>Contact</h1>
+            <h1
+                className="text-lg"
+            >Contact</h1>
             <form
-                className="bg-green-dark"
+                className="bg-green-dark text-white  p-4"
             >
                 <fieldset>
-                    <div>
+                    <div
+                        className="flex flex-col gap-4"
+                    >
+
+                        {/* Name field */}
                         <input 
                             type="text" 
                             placeholder="Nom"
                             value={formData.name}
                             onChange={handleChange} 
-                            name
+                            name="name"
+                            className="bg-black-dark py-2 px-4 rounded-full"
                         />
+
+                        {/* Mail field */}
+                        <input 
+                            type="text" 
+                            placeholder="mail@mail.com"
+                            value={formData.email}
+                            onChange={handleChange} 
+                            name="email"
+                            className="bg-black-dark py-2 px-4 rounded-full"
+                        />
+
+                        {/* Message field */}
+                        <input 
+                            type="text" 
+                            placeholder="Je voudrais avoir des informations sur..."
+                            value={formData.message}
+                            onChange={handleChange} 
+                            name="message"
+                            className="bg-black-dark py-2 px-4 rounded-full"
+                        />
+                        <textarea/>
                     </div>
                 </fieldset>
 
