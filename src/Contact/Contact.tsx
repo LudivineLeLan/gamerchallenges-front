@@ -1,14 +1,16 @@
 import React from 'react'
 
+type ContactData = {
+    name: string;
+    email: string;
+    message: string;
+}
+
 export default function Contact() {
-
-    type ContactConfig = {
-        name: 
-    }
-
     return (
         <div>
 
         </div>
     )
 }
+
