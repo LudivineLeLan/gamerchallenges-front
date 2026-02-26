@@ -33,14 +33,15 @@ export default function Contact() {
     return (
 
         <section
-            className=""
+            className="flex flex-col gap-2 items-center justify-center max-w-2/3 mx-auto"
         >
 
             <h1
                 className="text-lg"
             >Contact</h1>
             <form
-                className="bg-green-dark text-white  p-4"
+                className="
+                    text-sm bg-green-dark text-white p-4 rounded-lg border-green-light border-3 border-green-light"
             >
                 <fieldset>
                     <div
@@ -68,15 +69,25 @@ export default function Contact() {
                         />
 
                         {/* Message field */}
-                        <input 
-                            type="text" 
-                            placeholder="Je voudrais avoir des informations sur..."
+                        <textarea
+                            placeholder="Votre message"
                             value={formData.message}
-                            onChange={handleChange} 
                             name="message"
-                            className="bg-black-dark py-2 px-4 rounded-full"
+                            className="bg-black-dark py-2 px-4 rounded-lg h-[150px]"
                         />
-                        <textarea/>
+
+                        {/* Data management policy */}
+                        <div
+                            className="flex items-center justify-center gap-6"
+                        >
+                            <input 
+                                type="checkbox"
+                            />
+                            <span>
+                                J'ai pris connaissance et j'accepte la politique de confidentialité.
+                            </span>
+                        </div>
+
                     </div>
                 </fieldset>
 
