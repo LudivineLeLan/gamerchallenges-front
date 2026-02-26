@@ -9,17 +9,29 @@ type ContactData = {
 export default function Contact() {
 
     // Form data secured with ContactData type
-    // Data are updated with user text
+    // Form data is empty by default 
     const [formData, setFormData] = useState<ContactData>({
         name: '',
         email: '',
         message:'',
-    })
+    });
+
+
 
     return (
-        <div>
 
-        </div>
+        <section>
+
+            <form>
+
+                <legend>Contact</legend>
+                <fieldset>
+                    
+                </fieldset>
+
+            </form>
+
+        </section>
     )
 }
 
