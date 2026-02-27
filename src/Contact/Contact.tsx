@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { BiSolidMessageAltError } from "react-icons/bi";
 
-
 // Data required in form 
 type ContactData = {
     name: string;
@@ -84,8 +83,6 @@ export default function Contact() {
             setErrors(errorMessage)
         };
 
-
-
     };
 
     // --- HANDLE CHECKED ---
@@ -113,13 +110,19 @@ export default function Contact() {
         >
 
             <h1
-                className="text-lg italic uppercase font-bold text-white drop-shadow-title-glow"
+                className="
+                    text-h1-mobile italic uppercase font-bold text-white drop-shadow-title-glow 
+                    md:text-h1-tablet
+                    lg:text-h1-desktop
+                "
             >
                 Contact
             </h1>
             <form
                 className="
-                    text-sm bg-green-dark text-white p-4 rounded-lg border-green-light border-3 border-green-light"
+                    text-p-mobile bg-green-dark text-white p-4 rounded-lg border-green-light border-3 border-green-light
+                    md:text-p-tablet
+                    "
             >
                 <fieldset>
                     <div
