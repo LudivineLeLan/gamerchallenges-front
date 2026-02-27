@@ -9,6 +9,7 @@ type ContactData = {
     message: string;
 }
 
+
 export default function Contact() {
 
     // Form data secured with ContactData type
@@ -24,7 +25,7 @@ export default function Contact() {
 
     // Accept or not data management policy 
     // By default data policy is not accepted
-    const [isChecked, setIsChecked] = useState(false);
+    const [isChecked, setIsChecked] = useState<Boolean>(false);
 
     // --- UPDATE VALUES IN FORM ---
     const handleChange = (e : any) => {
