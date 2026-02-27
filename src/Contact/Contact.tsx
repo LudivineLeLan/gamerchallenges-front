@@ -25,7 +25,7 @@ export default function Contact() {
 
     // Accept or not data management policy 
     // By default data policy is not accepted
-    const [isChecked, setIsChecked] = useState<Boolean>(false);
+    const [isChecked, setIsChecked] = useState<boolean>(false);
 
     // --- UPDATE VALUES IN FORM ---
     const handleChange = (e : any) => {
@@ -78,6 +78,11 @@ export default function Contact() {
             setErrors(errorMessage)
         };
 
+    };
+
+    // --- HANDLE CHECKED ---
+    const handleChecked = (e : any) => {
+        setIsChecked(e.target.checked)
     }
 
     // --- SHOW ERROR MESSAGES --- 
@@ -148,6 +153,8 @@ export default function Contact() {
                         >
                             <input
                                 type="checkbox"
+                                checked={isChecked}
+                                onChange={handleChecked}
                             />
                             <span>
                                 J'accepte la politique de confidentialité.
