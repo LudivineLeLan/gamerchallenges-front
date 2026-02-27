@@ -7,8 +7,8 @@ type ContactData = {
     name: string;
     email: string;
     message: string;
+    isChecked: boolean | string;
 }
-
 
 export default function Contact() {
 
@@ -18,6 +18,7 @@ export default function Contact() {
         name: '',
         email: '',
         message: '',
+        isChecked: false
     });
 
     // Errors messages
@@ -73,10 +74,17 @@ export default function Contact() {
             errorMessage.message = "Le champ message est vide."
         };
 
+        // Checking that data management policy is accepted 
+        if (!isChecked) {
+            errorMessage.isChecked = "Vous devez accepter la politique."
+        }
+
         // Update the state of error only if there is an error
         if (Object.keys(errorMessage).length > 0) {
             setErrors(errorMessage)
         };
+
+
 
     };
 
@@ -90,7 +98,7 @@ export default function Contact() {
         return Object.values(errors).map((msg, i) => (
             <div
                 key={i}
-                className="flex justify-between items-center gap-2 border rounded-full py-2 px-4"
+                className="flex justify-between items-center gap-2 border rounded-full py-2 px-4 text-xs"
             >
                 <span>{msg}</span>
                 <BiSolidMessageAltError />
