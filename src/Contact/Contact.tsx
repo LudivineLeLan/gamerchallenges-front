@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 
+// Data required in form 
 type ContactData = {
     name: string;
     email: string;
@@ -38,14 +39,16 @@ export default function Contact() {
 
             <h1
                 className="text-lg"
-            >Contact</h1>
+            >
+                Contact
+            </h1>
             <form
                 className="
                     text-sm bg-green-dark text-white p-4 rounded-lg border-green-light border-3 border-green-light"
             >
                 <fieldset>
                     <div
-                        className="flex flex-col gap-4"
+                        className="flex flex-col gap-4 "
                     >
 
                         {/* Name field */}
@@ -84,9 +87,16 @@ export default function Contact() {
                                 type="checkbox"
                             />
                             <span>
-                                J'ai pris connaissance et j'accepte la politique de confidentialité.
+                                J'accepte la politique de confidentialité.
                             </span>
                         </div>
+
+                        <button
+                            className="
+                            text-sm bg-green-light py-2 px-10 rounded-full uppercase font-bold max-w-2/3 mx-auto"
+                        >
+                            Valider
+                        </button>
 
                     </div>
                 </fieldset>
