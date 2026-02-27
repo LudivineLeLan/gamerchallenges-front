@@ -40,28 +40,45 @@ const Games = () => {
 
 	return (
 		<div>
-			<h1>Liste des jeux</h1>
+			<h1 className="text-2xl font-semibold mb-4">Liste des jeux</h1>
 
-			{games.map((game) => (
-				<Link key={game.id} to={`/games/${game.id}`}>
-					<img src={game.cover} alt={game.title} width={150} />
-					<h3>{game.title}</h3>
-				</Link>
-			))}
+			{/* Grille 3x2 avec Tailwind */}
+			<div className="grid grid-cols-3 gap-5">
+				{games.map((game) => (
+					<Link
+						key={game.id}
+						to={`/games/${game.slug}`}
+						className="flex flex-col items-center"
+					>
+						{/* Classe CSS pour l'image */}
+						<img src={game.cover} alt={game.title} className="game-cover" />
+						<h3 className="mt-2 text-lg font-semibold text-white">
+							{game.title}
+						</h3>
+					</Link>
+				))}
+			</div>
 
-			<div>
+			{/* Pagination */}
+			<div className="flex justify-center gap-4 mt-4">
 				{page > 1 && (
-					<button type="button" onClick={() => fetchGames(page - 1)}>
+					<button
+						type="button"
+						onClick={() => fetchGames(page - 1)}
+						className="px-3 py-1 border-2 border-green-400 rounded hover:bg-green-400 hover:text-black"
+					>
 						Précédent
 					</button>
 				)}
-
-				<span>
+				<span className="text-white">
 					Page {page} / {totalPages}
 				</span>
-
 				{page < totalPages && (
-					<button type="button" onClick={() => fetchGames(page + 1)}>
+					<button
+						type="button"
+						onClick={() => fetchGames(page + 1)}
+						className="px-3 py-1 border-2 border-green-400 rounded hover:bg-green-400 hover:text-black"
+					>
 						Suivant
 					</button>
 				)}
@@ -71,3 +88,5 @@ const Games = () => {
 };
 
 export default Games;
+
+// pagination en 1,2,3

@@ -26,3 +26,40 @@ body {
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
+
+.game-cover {
+  width: 200px;       
+  height: 120px;     
+  object-fit:cover;  
+  border-radius: 8px; 
+  border: 2px solid var(--color-green-medium); 
+}
+
+.game-title {
+  font-size: 18px;
+  font-weight: bold;
+  font-weight: 600; 
+  margin-top: 8px;
+  color: #ffffff;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.pagination button {
+  padding: 6px 12px;
+  border: 2px solid #6bff05;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #ffffff;
+}
+
+.pagination button:hover {
+  background-color: #6bff05;
+  color: #001c22;
+}

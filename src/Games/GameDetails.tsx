@@ -42,18 +42,18 @@ const GameDetails = () => {
 	}
 
 	return (
-		<div>
-			<h1>{game.title}</h1>
-			<img src={game.cover} alt={game.title} width={200} />
-			<p>
-				<strong>Genre :</strong> {game.genre}
-			</p>
-			<p>
-				<strong>Année :</strong> {new Date(game.release_year).getFullYear()}
-			</p>
-			<p>{game.description}</p>
+		<div className="flex gap-5 mt-5">
+			<img src={game.cover} alt={game.title} className="game-cover" />
+			<div className="flex flex-col gap-2">
+				<h2 className="text-2xl font-semibold text-white">{game.title}</h2>
+				<p className="text-white">Genre: {game.genre}</p>
+				<p className="text-white">Année: {game.release_year}</p>
+				<p className="text-white">{game.description}</p>
+			</div>
 		</div>
 	);
 };
+
+// ajouter liste challenges liés + bouton "retour"
 
 export default GameDetails;
