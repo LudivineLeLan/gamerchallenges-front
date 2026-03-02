@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 import { BiSolidMessageAltError } from "react-icons/bi";
 
-// Data required in form 
+// Data required in form
 type ContactData = {
     name: string;
     email: string;
@@ -162,11 +162,11 @@ export default function Contact() {
                     md:text-h1-tablet
                     lg:text-h1-desktop
                 "
-            >
-                Contact
-            </h1>
-            <form
-                className="
+			>
+				Contact
+			</h1>
+			<form
+				className="
                     text-p-mobile bg-green-dark text-white p-4 rounded-lg border-green-light border-3 border-green-light
                     md:text-p-tablet
                     "
@@ -244,4 +244,3 @@ export default function Contact() {
         </section>
     )
 }
-
