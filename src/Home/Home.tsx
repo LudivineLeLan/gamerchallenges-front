@@ -1,10 +1,47 @@
-import titleImage from "../assets/images/Title.png";
-import temporaryImage from "../assets/images/cyberpunkcover.jpeg";
-import imageGame1 from "../assets/images/dofuscover.jpg";
-import imageGame2 from "../assets/images/animalcrossingcover.jpg";
-import imageGame3 from "../assets/images/reddeadcover.jpg";
+type User = {
+  id: number;
+  username: string;
+  email: string;
+  avatar?: string;
+};
 
+type Game = {
+  id: number;
+  title: string;
+  cover: string;
+};
+
+type Challenge = {
+  id: number;
+  name: string;
+  game: Game;
+};
+
+type Participation = {
+  id: number;
+  title: string;
+  url: string;
+  user_id: number;
+  challenge_id: number;
+  voteCount: number;
+  player: User;
+  challenge: Challenge;
+};
+
+import { useState, useEffect } from "react";
+import titleImage from "../assets/images/Title.png";
+import temporaryImage from "../assets/images/dofuscover.jpg";
 export default function Home() {
+  const [bestParticipations, setBestParticipations] = useState<Participation[]>(
+    [],
+  );
+
+  useEffect(() => {
+    fetch("http://localhost:3000/")
+      .then((res) => res.json())
+      .then((data) => setBestParticipations(data));
+  }, []);
+
   return (
     <>
       <article className="flex justify-center items-center gap-60 px-6 py-10">
@@ -28,44 +65,32 @@ export default function Home() {
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 justify-items-center max-w-6xl mx-auto">
-          <article className="flex flex-col items-center">
-            <img
-              src={imageGame1}
-              alt=""
-              className="w-60 h-60 rounded-lg mb-4 border-4 border-green-light object-cover 
-              transition-transform duration-300 ease-out hover:scale-105 hover:shadow-xl"
-            />
-            <p className="text-white font-medium text-center">
-              Posséder toutes les armes du jeu
-            </p>
-          </article>
+          {bestParticipations.map((p) => (
+            <article key={p.id} className="flex flex-col items-center">
+              <a href={p.url} target="_blank" rel="noopener noreferrer">
+                <img
+                  src={p.challenge.game.cover}
+                  alt={p.challenge.game.title}
+                  className="w-60 h-60 rounded-lg mb-4 border-4 border-green-light object-cover transition-transform duration-300 ease-out hover:scale-105 hover:shadow-xl"
+                />
+              </a>
 
-          <article className="flex flex-col items-center">
-            <img
-              src={imageGame2}
-              alt=""
-              className="w-60 h-60 rounded-lg mb-4 border-4 border-green-light object-cover 
-              transition-transform duration-300 ease-out hover:scale-105 hover:shadow-xl"
-            />
-            <p className="text-white font-medium text-center">Avoir 20 amis</p>
-          </article>
+              <p className="text-white font-medium text-center">
+                {p.challenge.name}
+              </p>
 
-          <article className="flex flex-col items-center">
-            <img
-              src={imageGame3}
-              alt=""
-              className="w-60 h-60 rounded-lg mb-4 border-4 border-green-light object-cover 
-              transition-transform duration-300 ease-out hover:scale-105 hover:shadow-xl"
-            />
-            <p className="text-white font-medium text-center">
-              Rester sur un cheval pendant trois heures
-            </p>
-          </article>
+              <p className="text-green-light text-sm">{p.title}</p>
+            </article>
+          ))}
         </div>
 
         <button
           type="button"
-          className="text-white font-bold bg-green-dark hover:bg-green-light px-8 py-3 rounded-full mt-10 transition active:bg-blue-medium">
+          className="text-white font-bold bg-green-dark hover:bg-green-light px-8 py-3 rounded-full mt-10 transition active:bg-blue-medium"
+          onClick={() => (window.location.href = "/challenges")}>
+          {" "}
+          {/* pour le moment c'est une redirection vers la page des challenges, à
+          changer plus tard  */}
           Voir plus
         </button>
       </section>
