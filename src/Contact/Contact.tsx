@@ -27,7 +27,7 @@ export default function Contact() {
     const [isChecked, setIsChecked] = useState<boolean>(false);
 
     // --- UPDATE VALUES IN FORM ---
-    const handleChange = (e : any) => {
+    const handleChange = (e : React.ChangeEvent<HTMLInputElement | HTMLInputElement>) => {
 
         // Get the value and the input name from event
         const { name, value } = e.target;
@@ -40,7 +40,7 @@ export default function Contact() {
     };
 
     // --- HANDLE FORM SUBMIT --- 
-    const handleSubmit = (e : any) => {
+    const handleSubmit = (e) => {
 
         // Stop the default settings of form
         e.preventDefault();
@@ -97,9 +97,9 @@ export default function Contact() {
     };
 
     // --- HANDLE CHECKED ---
-    const handleChecked = (e : any) => {
+    const handleChecked = (e : React.ChangeEvent<HTMLInputElement>) => {
         setIsChecked(e.target.checked)
-    }
+    };
 
     // --- SHOW ERROR MESSAGES --- 
     const showErrors = () => {
