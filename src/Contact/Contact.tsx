@@ -166,7 +166,7 @@ export default function Contact() {
     return (
 
         <section
-            className="flex flex-col gap-2 items-center justify-center max-w-2/3 mx-auto"
+            className="flex flex-col gap-2 items-center justify-center py-[2%] px-[2%] mx-auto"
         >
 
             <h1
@@ -175,12 +175,12 @@ export default function Contact() {
                     md:text-h1-tablet
                     lg:text-h1-desktop
                 "
-			>
-				Contact
-			</h1>
-			<form
-				className="
-                    text-p-mobile bg-green-dark text-white p-4 rounded-lg border-green-light border-3 border-green-light
+            >
+                Contact
+            </h1>
+            <form
+                className="
+                    text-p-mobile bg-green-dark text-white p-4 rounded-2xl border-green-light border-2 border-green-light
                     md:text-p-tablet
                     "
                 onSubmit={handleSubmit}
@@ -244,7 +244,6 @@ export default function Contact() {
                 </fieldset>
 
             </form>
-
 
             {/* Error messages if existing */}
             {Object.keys(errors).length > 0 && (
