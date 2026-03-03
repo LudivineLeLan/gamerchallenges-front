@@ -251,6 +251,8 @@ export default function Contact() {
             <Button
                 label="Retour à l'accueil"
                 type="button"
+                width="max-w-none"
+                rounded="rounded-full"
                 onClick={() => navigate("/")}
             />
 

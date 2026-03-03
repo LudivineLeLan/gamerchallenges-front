@@ -8,6 +8,7 @@ type ButtonProps = {
     rounded?: string;
     padding?: string;
     margin?: string;
+    width?: string;
     onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
@@ -19,13 +20,14 @@ export default function Button({
     rounded = "rounded-full",
     padding = "py-2 px-10",
     margin = "",
+    width ="max-w-2/3",
     onClick
 } : ButtonProps) {
 
     return (
         <button
             className={`
-                text-sm ${bgColor} ${padding} ${margin} ${rounded} cursor-pointer uppercase font-bold max-w-2/3 mx-auto border-2 ${borderColor}
+                text-sm ${bgColor} ${padding} ${margin} ${rounded} cursor-pointer uppercase font-bold ${width} mx-auto border-2 ${borderColor}
                 hover:bg-white hover:text-green-light hover:border-green-light
                 md:text-base
                 `}
