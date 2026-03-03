@@ -10,7 +10,7 @@ export const Footer: React.FC = () => {
         <Link to="/contact">contact</Link>
       </div>  
       <p className="text-white font-bold text-xs">
-        2026 - gamerschallenges
+        2025 - gamerschallenges
       </p>
     </footer>
   );
