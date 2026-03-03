@@ -175,6 +175,8 @@ export default function Contact() {
             className="flex flex-col py-2 gap-2 items-center justify-center mx-auto min-h-screen w-full"
         >
 
+
+
             <form
                 className="
                     flex flex-col gap-6 text-p-mobile bg-green-dark text-white p-4 my-2 rounded-2xl border-green-light border-2 border-green-light
@@ -184,14 +186,14 @@ export default function Contact() {
                 onSubmit={handleSubmit}
             >
                 <h1
-                className="
+                    className="
                     text-h1-mobile italic uppercase font-bold text-white drop-shadow-title-glow text-center
                     md:text-h1-tablet
                     lg:text-h1-desktop
                 "
-            >
-                Contactez-nous
-            </h1>
+                >
+                    Contactez-nous
+                </h1>
                 <fieldset
                     className="w-full
                         lg:max-w-[80%] lg:mx-auto
@@ -248,9 +250,18 @@ export default function Contact() {
                             label="Valider"
                             type="submit"
                         />
-
                     </div>
                 </fieldset>
+
+                {/* Success message if existing */}
+                {success && (
+                    <div
+                        className="fixed left-0 top-40 flex gap-2 border-2 border-green-light rounded-r-full py-2 px-4 text-xs bg-green-medium"
+                    >
+                        <p>{success}</p>
+                        <FaCircleCheck />
+                    </div>
+                )}
             </form>
 
             <Button
@@ -268,16 +279,6 @@ export default function Contact() {
                     className="flex flex-col gap-2"
                 >
                     {showErrors()}
-                </div>
-            )}
-
-            {/* Success message if existing */}
-            {success && (
-                <div
-                    className="flex gap-2 border rounded-full py-2 px-4 text-xs"
-                >
-                    <p>{success}</p>
-                    <FaCircleCheck />
                 </div>
             )}
 
