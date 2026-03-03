@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { BiSolidMessageAltError } from "react-icons/bi";
 import { FaCircleCheck } from "react-icons/fa6";
+import Button from "../ui/Button";
 
 // Data required in form
 type ContactData = {
@@ -232,17 +233,18 @@ export default function Contact() {
                             </span>
                         </div>
 
-                        <button
-                            className="text-sm bg-green-light py-2 px-10 rounded-full uppercase font-bold max-w-2/3 mx-auto"
+                        <Button
+                            label="Valider"
                             type="submit"
-                        >
-                            Valider
-                        </button>
+                            bgColor="bg-green-dark"
+                            rounded="rounded-full"
+                        />
 
                     </div>
                 </fieldset>
 
             </form>
+
 
             {/* Error messages if existing */}
             {Object.keys(errors).length > 0 && (
