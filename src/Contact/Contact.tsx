@@ -242,10 +242,6 @@ export default function Contact() {
                         <Button
                             label="Valider"
                             type="submit"
-                            bgColor="bg-green-medium"
-                            rounded="rounded-full"
-                            padding="py-2"
-                            margin="px-10"
                         />
 
                     </div>
@@ -255,10 +251,6 @@ export default function Contact() {
             <Button
                 label="Retour à l'accueil"
                 type="button"
-                bgColor="bg-green-medium"
-                rounded="rounded-full"
-                padding="py-2"
-                margin="px-10"
                 onClick={() => navigate("/")}
             />
 
