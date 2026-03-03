@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import GameImage from "../ui/GameCover";
 import { FaHeart } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 type Game = {
 	id: number;
@@ -49,9 +50,7 @@ const GameDetails = () => {
 
 	return (
 		<div className="mx-3 md:mx-0 mt-5">
-			{/* Grande carte principale */}
 			<div className="border-2 border-[var(--color-green-light)] rounded-2xl p-8">
-				{/* Bloc jeu */}
 				<div className="flex flex-col md:flex-row gap-6">
 					<GameImage src={game.cover} alt={game.title} />
 
@@ -75,7 +74,8 @@ const GameDetails = () => {
 					</h3>
 
 					{game.challenges.map((challenge) => (
-						<div
+						<Link
+							to={`/challenges/${challenge.id}`}
 							key={challenge.id}
 							className="flex items-center justify-between
                        border-2 border-[var(--color-green-light)]
@@ -87,7 +87,7 @@ const GameDetails = () => {
 								<span>{challenge.votes ?? 0}</span>
 								<FaHeart className="text-white" />
 							</div>
-						</div>
+						</Link>
 					))}
 				</div>
 			</div>
