@@ -186,7 +186,7 @@ export default function Contact() {
             </h1>
             <form
                 className="
-                    text-p-mobile bg-green-dark text-white p-4 rounded-2xl border-green-light border-2 border-green-light
+                    text-p-mobile bg-green-dark text-white p-4 my-2 rounded-2xl border-green-light border-2 border-green-light
                     md:text-p-tablet
                     "
                 onSubmit={handleSubmit}
