@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import GameImage from "../ui/GameCover";
 import { FaHeart } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import Button from "../ui/Button";
 
 type Game = {
 	id: number;
@@ -92,12 +93,12 @@ const GameDetails = () => {
 					))}
 				</div>
 			</div>
+			<div className="flex justify-center mt-10 w-full">
+				<Link to="/games">
+					<Button label="Retour" type="button" />
+				</Link>
+			</div>
 		</div>
-		//   <div className="flex justify-center mt-10">
-		//   <Link to="/games">
-		//     <BackButton /> {/* ton futur composant */}
-		//   </Link>
-		// </div>
 	);
 };
 
