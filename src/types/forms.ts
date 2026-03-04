@@ -17,3 +17,12 @@ export type LoginUserInputs = {
 
 // Merged BaseUserInputs with ContactUserInputs to export only one type
 export type ContactFormData = BaseUserInputs & ContactUserInputs;
+
+// Type for errors in form
+// <T> is a parameter it can be replaced by the form needed
+// Partial make this type optional
+// keyof allows to create an object from the form put in parameter
+export type FormErrors<T> = Partial<Record<keyof T, string>> & {
+    isChecked?: string;
+    server?: string;
+}

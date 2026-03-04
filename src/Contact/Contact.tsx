@@ -3,11 +3,12 @@ import { BiSolidMessageAltError } from "react-icons/bi";
 import { FaCircleCheck } from "react-icons/fa6";
 import Button from "../ui/Button";
 import { useNavigate } from "react-router-dom";
-import type { ContactFormData } from "../types/forms";
+import type { ContactFormData, FormErrors } from "../types/forms";
+import type { FormErrors } from "../types/forms";
 
 export default function Contact() {
 
-    // Form data secured with ContactData type
+    // Form data secured with ContactFormData type
     // Form data is empty by default 
     const [formData, setFormData] = useState<ContactFormData>({
         name: '',
@@ -22,7 +23,7 @@ export default function Contact() {
     const [success, setSuccessMessage] = useState<string>('');
 
     // Errors messages
-    const [errors, setErrors] = useState<Partial<ContactData>>({});
+    const [errors, setErrors] =useState<FormErrors<ContactFormData>>({});
 
     // Accept or not data management policy 
     // By default data policy is not accepted
