@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { FaCircleCheck } from "react-icons/fa6";
+
 import Button from "../ui/Button";
 import { useNavigate } from "react-router-dom";
 import type { ContactFormData, FormErrors } from "../types/forms";
 import { validateContactForm } from "../utils/validation";
 import Input from "../ui/Input";
 import ErrorSummary from "../ui/ErrorSummary";
+import type { SuccessMessageProps } from "../types/messages";
+import SuccessMessage from "../ui/SuccessMessage";
 
 export default function Contact() {
 
@@ -117,7 +119,7 @@ export default function Contact() {
     };
 
     // --- HANDLE CHECKED ---
-    const handleChecked = (e : React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)  => {
+    const handleChecked = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const target = e.target as HTMLInputElement
         setIsChecked(target.checked)
     };
@@ -215,16 +217,11 @@ export default function Contact() {
                 onClick={() => navigate("/")}
             />
 
-            {/* Success message if existing */}
-            {success && (
-                <div
-                    className="fixed left-0 top-40 flex gap-2 border-2 border-green-light rounded-r-full py-2 px-4 text-xs bg-green-medium"
-                >
-                    <p>{success}</p>
-                    <FaCircleCheck />
-                </div>
-            )}
+            {/* Success message */}
 
+            <SuccessMessage success={success} />
+
+            {/* Error messages */}
             <ErrorSummary errors={errors} />
 
         </section>

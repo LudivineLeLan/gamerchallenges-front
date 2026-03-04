@@ -3,5 +3,5 @@ export type ErrorSummaryProps = {
 }
 
 export type SuccessMessageProps = {
-    message: string;
+    success: string;
 }
