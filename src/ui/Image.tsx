@@ -1,9 +1,9 @@
-type GameImageProps = {
+type ImageProps = {
 	src: string;
 	alt: string;
 };
 
-const GameImage = ({ src, alt = "" }: GameImageProps) => {
+const Image = ({ src, alt = "" }: ImageProps) => {
 	return (
 		<img
 			src={src}
@@ -13,4 +13,4 @@ const GameImage = ({ src, alt = "" }: GameImageProps) => {
 	);
 };
 
-export default GameImage;
+export default Image;

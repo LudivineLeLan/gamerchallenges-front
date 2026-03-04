@@ -9,6 +9,7 @@ import Contact from "./Contact/Contact";
 // import APropos from "./APropos/APropos";
 // import MentionsLegales from "./MentionsLegales/MentionsLegales";
 import { Footer } from "./ui/Footer";
+import Ranking from "./Ranking/ranking";
 
 export default function App() {
 	return (
@@ -21,11 +22,12 @@ export default function App() {
 					<Route path="/challenges" element={<Challenges />} />
 					<Route path="/my-challenges" element={<MyChallenges />} />
 					<Route path="/contact" element={<Contact />} />
+					<Route path="/ranking" element={<Ranking />} />
 					{/* <Route path="/a-propos" element={<APropos />} /> */}
 					{/* <Route path="/mentions-legales" element={<MentionsLegales />} />  */}
 				</Routes>
 				<Footer />
-			</div>	
+			</div>
 		</BrowserRouter>
 	);
 }
