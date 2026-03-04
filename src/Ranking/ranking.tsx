@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import H1Title from "../ui/H1Title";
-import { FaHeart } from "react-icons/fa";
-import { FaTrophy } from "react-icons/fa";
+import { FaHeart, FaTrophy } from "react-icons/fa";
 import Image from "../ui/Image";
 
 type RankingUser = {
@@ -37,7 +36,7 @@ export default function Ranking() {
 
 				setTopParticipations(participationsData);
 				setTopVotes(votesData);
-			} catch (error) {
+			} catch {
 				setError("Impossible de charger les classements");
 			} finally {
 				setLoading(false);
@@ -50,26 +49,34 @@ export default function Ranking() {
 	if (loading) return <p>Chargement...</p>;
 	if (error) return <p>{error}</p>;
 
-	//même type de carte pour chaque joueur - peut-être à isoler en composant ?
+	// même type de carte pour chaque joueur - peut-être à isoler en composant ?
 	const userCard = (user: RankingUser, index: number, isVote?: boolean) => {
-		const widthClass = index === 0 ? "w-80" : "w-64"; // 1er joueur a une carte plus large que les autres
+		// Largeur plus grande pour joueur numéro 1
+		const isFirst = index === 0;
+
 		return (
 			<li
 				key={user.id}
-				className={`${widthClass} border-3 border-green-medium rounded-3xl overflow-hidden p-4 mb-4 flex flex-col items-center gap-2 text-center shadow-md hover:shadow-lg transition-shadow`}
+				className={`
+  				w-full border-3 border-green-medium rounded-3xl
+  				flex flex-col items-center gap-2 text-center
+  				shadow-md hover:shadow-lg transition-shadow
+  				${isFirst ? "max-w-[28rem] p-6 scale-105 md:scale-110" : "max-w-[20rem] p-4"}
+`}
 			>
-				<Image
-					src={user.avatar}
-					alt={user.username}
-					className="w-16 h-16 rounded-full"
-				/>
+				<div className="relative">
+					<div className="absolute inset-0 top-0 bottom-0 left-1/2 transform -translate-x-1/2 bg-green-light opacity-20 rounded-full blur-3xl"></div>
+					<Image
+						src={user.avatar}
+						alt={user.username}
+						className={`rounded-full relative z-10 ${isFirst ? "w-28 h-28" : "w-20 h-20"}`}
+					/>
+				</div>
+
 				<span className="font-semibold">{user.username}</span>
 				{isVote ? (
-					<span className="flex items-center gap-2">
-						<span className="font-semibold">{user.username}</span>
-						<span className="flex items-center gap-1">
-							{user.voteCount} <FaHeart className="text-red-500" />
-						</span>
+					<span className="flex items-center gap-1">
+						{user.voteCount} <FaHeart className="text-red-500" />
 					</span>
 				) : (
 					<span>{user.participationCount} participation(s)</span>
@@ -79,20 +86,21 @@ export default function Ranking() {
 	};
 
 	return (
-		<div className="max-w-md mx-auto">
+		<div className="max-w-5xl mx-auto px-4">
 			<H1Title>CLASSEMENTS</H1Title>
 
 			<h2 className="flex items-center justify-center gap-2 mb-2">
 				<FaTrophy className="text-yellow-500" /> Top participations
 			</h2>
-			<ul className="flex flex-col items-center">
+			{/* affichage en colonne sur mobile, en ligne sur desktop */}
+			<ul className="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-10">
 				{topParticipations.map((user, index) => userCard(user, index))}
 			</ul>
 
 			<h2 className="flex items-center justify-center gap-2 mt-6 mb-2">
 				<FaTrophy className="text-yellow-500" /> Top votes reçus
 			</h2>
-			<ul className="flex flex-col items-center">
+			<ul className="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-10">
 				{topVotes.map((user, index) => userCard(user, index, true))}
 			</ul>
 		</div>
