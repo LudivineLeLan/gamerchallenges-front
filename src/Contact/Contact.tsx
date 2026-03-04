@@ -161,7 +161,7 @@ export default function Contact() {
         return Object.values(errors).map((msg, i) => (
             <div
                 key={i}
-                className="flex justify-between items-center gap-2 border rounded-full py-2 px-4 text-xs"
+                className="flex justify-between items-center gap-2 border-2 border-red-dark bg-red-medium rounded-r-full py-2 px-4 text-xs"
             >
                 <span>{msg}</span>
                 <BiSolidMessageAltError />
@@ -252,16 +252,6 @@ export default function Contact() {
                         />
                     </div>
                 </fieldset>
-
-                {/* Success message if existing */}
-                {success && (
-                    <div
-                        className="fixed left-0 top-40 flex gap-2 border-2 border-green-light rounded-r-full py-2 px-4 text-xs bg-green-medium"
-                    >
-                        <p>{success}</p>
-                        <FaCircleCheck />
-                    </div>
-                )}
             </form>
 
             <Button
@@ -272,11 +262,20 @@ export default function Contact() {
                 onClick={() => navigate("/")}
             />
 
+             {/* Success message if existing */}
+                {success && (
+                    <div
+                        className="fixed left-0 top-40 flex gap-2 border-2 border-green-light rounded-r-full py-2 px-4 text-xs bg-green-medium"
+                    >
+                        <p>{success}</p>
+                        <FaCircleCheck />
+                    </div>
+                )}
 
             {/* Error messages if existing */}
             {Object.keys(errors).length > 0 && (
                 <div
-                    className="flex flex-col gap-2"
+                    className="fixed left-0 top-10 flex flex-col gap-2"
                 >
                     {showErrors()}
                 </div>
