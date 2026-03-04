@@ -7,15 +7,23 @@ type ErrorSummaryProps = {
 
 export default function ErrorSummary({errors} : ErrorSummaryProps) {
 
+    // Check if the object contain keys
+    if(Object.keys(errors).length === 0) return null;
 
-
-    return Object.values(errors).map((msg, i) => (
+    return (
         <div
-            key={i}
-            className="flex justify-between items-center gap-2 border-2 border-red-dark bg-red-medium rounded-r-full py-2 px-4 text-xs"
+            className="fixed left-0 top-10 flex flex-col items-start gap-2"
         >
-            <span>{msg}</span>
-            <BiSolidMessageAltError />
+            {/* Transform key object into array */}
+            {Object.values(errors).map((msg, i) => (
+                <div
+                    key={i}
+                    className="flex justify-between items-center gap-2 border-2 border-red-dark bg-red-medium rounded-r-full py-2 px-4 text-xs text-white"
+                >
+                    <span>{msg}</span>
+                    <BiSolidMessageAltError />
+                </div>
+            ))}
         </div>
-    ))
+    )
 }

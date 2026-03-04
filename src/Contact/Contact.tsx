@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import type { ContactFormData, FormErrors } from "../types/forms";
 import { validateContactForm } from "../utils/validation";
 import Input from "../ui/Input";
+import ErrorSummary from "../ui/ErrorSummary";
 
 export default function Contact() {
 
@@ -121,19 +122,6 @@ export default function Contact() {
         setIsChecked(target.checked)
     };
 
-    // --- SHOW ERROR MESSAGES --- 
-    const showErrors = () => {
-        return Object.values(errors).map((msg, i) => (
-            <div
-                key={i}
-                className="flex justify-between items-center gap-2 border-2 border-red-dark bg-red-medium rounded-r-full py-2 px-4 text-xs"
-            >
-                <span>{msg}</span>
-                <BiSolidMessageAltError />
-            </div>
-        ))
-    };
-
     return (
 
         <section
@@ -237,14 +225,7 @@ export default function Contact() {
                 </div>
             )}
 
-            {/* Error messages if existing */}
-            {Object.keys(errors).length > 0 && (
-                <div
-                    className="fixed left-0 top-10 flex flex-col gap-2"
-                >
-                    {showErrors()}
-                </div>
-            )}
+            <ErrorSummary errors={errors} />
 
         </section>
     )
