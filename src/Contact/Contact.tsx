@@ -161,7 +161,7 @@ export default function Contact() {
         return Object.values(errors).map((msg, i) => (
             <div
                 key={i}
-                className="flex justify-between items-center gap-2 border rounded-full py-2 px-4 text-xs"
+                className="flex justify-between items-center gap-2 border-2 border-red-dark bg-red-medium rounded-r-full py-2 px-4 text-xs"
             >
                 <span>{msg}</span>
                 <BiSolidMessageAltError />
@@ -172,28 +172,35 @@ export default function Contact() {
     return (
 
         <section
-            className="flex flex-col py-2 gap-2 items-center justify-center mx-auto"
+            className="flex flex-col py-2 gap-2 items-center justify-center mx-auto min-h-screen w-full"
         >
 
-            <h1
-                className="
-                    text-h1-mobile italic uppercase font-bold text-white drop-shadow-title-glow 
-                    md:text-h1-tablet
-                    lg:text-h1-desktop
-                "
-            >
-                Contact
-            </h1>
+
+
             <form
                 className="
-                    text-p-mobile bg-green-dark text-white p-4 my-2 rounded-2xl border-green-light border-2 border-green-light
+                    flex flex-col gap-6 text-p-mobile bg-green-dark text-white p-4 my-2 rounded-2xl border-green-light border-2 border-green-light
                     md:text-p-tablet
+                    lg:w-full lg:max-w-[600px]
                     "
                 onSubmit={handleSubmit}
             >
-                <fieldset>
+                <h1
+                    className="
+                    text-h1-mobile italic uppercase font-bold text-white drop-shadow-title-glow text-center
+                    md:text-h1-tablet
+                    lg:text-h1-desktop
+                "
+                >
+                    Contactez-nous
+                </h1>
+                <fieldset
+                    className="w-full
+                        lg:max-w-[80%] lg:mx-auto
+                    "
+                >
                     <div
-                        className="flex flex-col gap-4 "
+                        className="flex flex-col gap-4 w-full"
                     >
 
                         {/* Name field */}
@@ -203,7 +210,7 @@ export default function Contact() {
                             value={formData.name}
                             onChange={handleChange}
                             name="name"
-                            className="bg-black-dark py-2 px-4 rounded-full"
+                            className="bg-black-dark py-2 px-4 rounded-full w-full"
                         />
 
                         {/* Mail field */}
@@ -213,7 +220,7 @@ export default function Contact() {
                             value={formData.email}
                             onChange={handleChange}
                             name="email"
-                            className="bg-black-dark py-2 px-4 rounded-full"
+                            className="bg-black-dark py-2 px-4 rounded-full w-full"
                         />
 
                         {/* Message field */}
@@ -222,12 +229,12 @@ export default function Contact() {
                             value={formData.message}
                             onChange={handleChange}
                             name="message"
-                            className="bg-black-dark py-2 px-4 rounded-lg h-[150px]"
+                            className="bg-black-dark py-2 px-4 rounded-lg h-[150px] w-full"
                         />
 
                         {/* Data management policy */}
                         <div
-                            className="flex items-center justify-center gap-6"
+                            className="flex items-center justify-center gap-6 w-full"
                         >
                             <input
                                 type="checkbox"
@@ -243,7 +250,6 @@ export default function Contact() {
                             label="Valider"
                             type="submit"
                         />
-
                     </div>
                 </fieldset>
             </form>
@@ -251,24 +257,27 @@ export default function Contact() {
             <Button
                 label="Retour à l'accueil"
                 type="button"
+                width="max-w-none"
+                rounded="rounded-full"
                 onClick={() => navigate("/")}
             />
 
+             {/* Success message if existing */}
+                {success && (
+                    <div
+                        className="fixed left-0 top-40 flex gap-2 border-2 border-green-light rounded-r-full py-2 px-4 text-xs bg-green-medium"
+                    >
+                        <p>{success}</p>
+                        <FaCircleCheck />
+                    </div>
+                )}
 
             {/* Error messages if existing */}
             {Object.keys(errors).length > 0 && (
                 <div
-                    className="flex flex-col gap-2"
+                    className="fixed left-0 top-10 flex flex-col gap-2"
                 >
                     {showErrors()}
-                </div>
-            )}
-
-            {/* Success message if existing */}
-            {success && (
-                <div>
-                    <p>{success}</p>
-                    <FaCircleCheck />
                 </div>
             )}
 
