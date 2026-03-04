@@ -24,7 +24,7 @@ export default function Contact() {
     const [success, setSuccessMessage] = useState<string>('');
 
     // Errors messages
-    const [errors, setErrors] =useState<FormErrors<ContactFormData>>({});
+    const [errors, setErrors] = useState<FormErrors<ContactFormData>>({});
 
     // Accept or not data management policy 
     // By default data policy is not accepted
@@ -52,8 +52,8 @@ export default function Contact() {
         // Clear errors state with empty object
         setErrors({});
 
-       // Check if data are valid
-       const result = validateContactForm(formData, isChecked)
+        // Check if data are valid
+        const result = validateContactForm(formData, isChecked)
 
         // Update the state of error only if there is an error
         // Stop the code 
@@ -85,7 +85,7 @@ export default function Contact() {
             // Check the server response
             if (!response.ok) {
                 console.error("Erreur lors de l'envoie du message", data.error)
-                setErrors({ server: data.error})
+                setErrors({ server: data.error })
                 return
             };
 
@@ -111,14 +111,15 @@ export default function Contact() {
 
             // create error if connection to server is broken
         } catch (error) {
-            setErrors({ server: "Impossible de se connecter au serveur."})
+            setErrors({ server: "Impossible de se connecter au serveur." })
             return
         };
     };
 
     // --- HANDLE CHECKED ---
-    const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setIsChecked(e.target.checked)
+    const handleChecked = (e : React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)  => {
+        const target = e.target as HTMLInputElement
+        setIsChecked(target.checked)
     };
 
     // --- SHOW ERROR MESSAGES --- 
@@ -176,7 +177,7 @@ export default function Contact() {
                             onChange={handleChange}
                             name="name"
                         />
-                        
+
                         {/* Mail input */}
 
                         <Input
@@ -192,7 +193,7 @@ export default function Contact() {
                             placeholder="Mon message"
                             value={formData.message}
                             onChange={handleChange}
-                            name="email"
+                            name="message"
                             isTextArea
                         />
 
@@ -201,11 +202,11 @@ export default function Contact() {
                         <div
                             className="flex items-center justify-center gap-6 w-full"
                         >
-                            <input
+                            <Input
                                 type="checkbox"
-                                checked={isChecked}
                                 onChange={handleChecked}
                             />
+
                             <span>
                                 J'accepte la politique de confidentialité.
                             </span>
@@ -227,15 +228,15 @@ export default function Contact() {
                 onClick={() => navigate("/")}
             />
 
-             {/* Success message if existing */}
-                {success && (
-                    <div
-                        className="fixed left-0 top-40 flex gap-2 border-2 border-green-light rounded-r-full py-2 px-4 text-xs bg-green-medium"
-                    >
-                        <p>{success}</p>
-                        <FaCircleCheck />
-                    </div>
-                )}
+            {/* Success message if existing */}
+            {success && (
+                <div
+                    className="fixed left-0 top-40 flex gap-2 border-2 border-green-light rounded-r-full py-2 px-4 text-xs bg-green-medium"
+                >
+                    <p>{success}</p>
+                    <FaCircleCheck />
+                </div>
+            )}
 
             {/* Error messages if existing */}
             {Object.keys(errors).length > 0 && (

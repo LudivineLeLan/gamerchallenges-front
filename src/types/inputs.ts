@@ -6,5 +6,5 @@ export type InputProps = {
     onChange : (e : React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     checked? : boolean;
     value?: string;
-    name: string;
+    name?: string;
 }
