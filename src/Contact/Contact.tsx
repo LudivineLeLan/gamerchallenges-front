@@ -5,6 +5,7 @@ import Button from "../ui/Button";
 import { useNavigate } from "react-router-dom";
 import type { ContactFormData, FormErrors } from "../types/forms";
 import { validateContactForm } from "../utils/validation";
+import Input from "../ui/Input";
 
 export default function Contact() {
 
@@ -167,34 +168,34 @@ export default function Contact() {
                         className="flex flex-col gap-4 w-full"
                     >
 
-                        {/* Name field */}
-                        <input
+                        {/* Name input */}
+                        <Input
                             type="text"
                             placeholder="Nom"
                             value={formData.name}
                             onChange={handleChange}
                             name="name"
-                            className="bg-black-dark py-2 px-4 rounded-full w-full"
                         />
+                        
+                        {/* Mail input */}
 
-                        {/* Mail field */}
-                        <input
+                        <Input
                             type="email"
                             placeholder="mail@mail.com"
                             value={formData.email}
                             onChange={handleChange}
                             name="email"
-                            className="bg-black-dark py-2 px-4 rounded-full w-full"
                         />
 
-                        {/* Message field */}
-                        <textarea
-                            placeholder="Votre message"
+                        {/* Message input */}
+                        <Input
+                            placeholder="Mon message"
                             value={formData.message}
                             onChange={handleChange}
-                            name="message"
-                            className="bg-black-dark py-2 px-4 rounded-lg h-[150px] w-full"
+                            name="email"
+                            isTextArea
                         />
+
 
                         {/* Data management policy */}
                         <div
