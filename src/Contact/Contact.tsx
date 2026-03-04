@@ -8,6 +8,7 @@ import Input from "../ui/Input";
 import ErrorSummary from "../ui/ErrorSummary";
 import type { SuccessMessageProps } from "../types/messages";
 import SuccessMessage from "../ui/SuccessMessage";
+import { sendContactMessage } from "../Services/contactService";
 
 export default function Contact() {
 
@@ -64,32 +65,10 @@ export default function Contact() {
             return;
         };
 
-        // Data from form
-        const bodyContent = JSON.stringify(formData);
-
-        // Headers data for fetch
-        const headersContent = { "Content-Type": "application/json" }
-
         // --- FETCH DATA TO BACKEND --- 
         try {
 
-            // Api url 
-            const apiUrl = import.meta.env.VITE_API_URL;
-
-            const response = await fetch(`${apiUrl}/contact`, {
-                method: "POST",
-                headers: headersContent,
-                body: bodyContent,
-            });
-
-            const data = await response.json();
-
-            // Check the server response
-            if (!response.ok) {
-                console.error("Erreur lors de l'envoie du message", data.error)
-                setErrors({ server: data.error })
-                return
-            };
+            const data = await sendContactMessage(formData);
 
             // Show success message 
             setSuccessMessage(data.message);
@@ -110,11 +89,18 @@ export default function Contact() {
             // Put isChecked to its initial state
             setIsChecked(false);
 
-
             // create error if connection to server is broken
         } catch (error) {
-            setErrors({ server: "Impossible de se connecter au serveur." })
-            return
+
+            // Checking if the error is from instance Errror
+            if (error instanceof Error) {
+                setErrors({ server: error.message });
+
+            } else {
+                // If the error does not come from Error Instance
+                setErrors({ server: "Une erreur de serveur est survenue." });
+            }
+            return;
         };
     };
 

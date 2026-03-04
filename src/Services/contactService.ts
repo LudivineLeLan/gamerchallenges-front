@@ -23,10 +23,12 @@ export const sendContactMessage = async (dataForm: ContactFormData) => {
 
     const data = await response.json();
 
+    // Checking the server answer
     if (!response.ok) {
         console.error("Erreur lors de l'envoi du message dans le formulaire de contact :", data.error);
-        throw new Error(data.error);
+        throw new Error(data.error || "Impossible de se connecter au serveur.");
     };
 
+    // Return data in case of success
     return data;
 }
