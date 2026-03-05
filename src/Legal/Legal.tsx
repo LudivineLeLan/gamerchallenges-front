@@ -1,14 +1,14 @@
-
 import { useNavigate } from "react-router-dom";
 
-interface LegalProps {
-}
-
-function Legal(props: LegalProps) {
+function Legal() {
     const navigate = useNavigate();
+
     return (
         <div className="max-w-4xl mx-auto p-6 text-center">
-            <h1 className="text-4xl font-bold mb-6 text-white ">MENTIONS LÉGALES</h1>
+            <h1 className="text-4xl font-bold mb-6 text-white">
+                MENTIONS LÉGALES
+            </h1>
+
             <p className="text-lg text-white mb-4 text-justify">
                 GamerChallenges
                 Rue du challenge, Jeuville, France
@@ -17,6 +17,7 @@ function Legal(props: LegalProps) {
                 Email : contact@gamerchallenges.fr
                 Hébergeur : Tél. 1007
             </p>
+
             <p className="text-lg text-white mb-4 text-justify">
                 1. Les données personnelles collectées sur ce site sont traitées par : GamerChallenges.<br /><br />
                 2. Nous collectons uniquement les données nécessaires au bon fonctionnement du service, telles que : nom d’utilisateur, adresse e-mail, avatar, mot de passe (chiffré).<br /><br />
@@ -31,9 +32,10 @@ function Legal(props: LegalProps) {
                 11. Contact : dpo@gamerchallenges.fr.<br /><br />
                 12. Les données sont protégées par chiffrement, HTTPS et mots de passe hashés.
             </p>
+
             <button
                 onClick={() => navigate("/")}
-                className="mt-6 px-6 py-3 uppercase font-bold bg-green-light text-whitefont-semibold rounded-4xl hover:bg-white hover:text-green-light border-2 border-green-light transition-colors"
+                className="mt-6 px-6 py-3 uppercase font-bold bg-green-light text-white rounded-4xl hover:bg-white hover:text-green-light border-2 border-green-light transition-colors"
             >
                 Retour accueil
             </button>
