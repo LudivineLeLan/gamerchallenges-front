@@ -9,12 +9,14 @@ import Contact from "./Contact/Contact";
 // import APropos from "./APropos/APropos";
 // import MentionsLegales from "./MentionsLegales/MentionsLegales";
 import { Footer } from "./ui/Footer";
+import Header from "./components/Header/Header";
 import Ranking from "./Ranking/Ranking";
 
 export default function App() {
 	return (
 		<BrowserRouter>
 			<div className="min-h-screen flex flex-col">
+				<Header />
 				<Routes>
 					<Route path="/" element={<Home />} />
 					<Route path="/games" element={<Games />} />
