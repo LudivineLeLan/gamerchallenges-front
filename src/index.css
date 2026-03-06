@@ -15,6 +15,11 @@
   --color-black-dark: #091e0a;
   --color-red-medium: #E7000B;
   --color-red-dark: #9F0712;
+
+  /* Sections settings */
+  --section-spacing-mobile: 1rem;
+  --section-spacing-tablet: 1.5rem;
+  --section-spacing-desktop: 2rem;
   
   /* Titles settings */
   --text-h1-mobile: 1.125rem;
