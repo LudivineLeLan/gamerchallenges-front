@@ -1,9 +1,5 @@
-import { ReactNode } from "react"; //nécessaire pour afficher ce qu'on indique entre les balises H1, sinon reste invisible
+import type { H1TitleProps } from "../types/titles";
 
-type H1TitleProps = {
-	children?: ReactNode;
-	size?: "h1-mobile" | "h1-tablet" | "h1-desktop"
-};
 
 const H1Title = ({ children, size = "h1-desktop" }: H1TitleProps) => {
 	return (
