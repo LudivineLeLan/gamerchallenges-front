@@ -1,16 +1,16 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import Home from "./Home/Home";
-import Games from "./Games/Games";
-import GameDetails from "./Games/GameDetails";
-import Challenges from "./Challenges/Challenges";
-import MyChallenges from "./Challenges/MyChallenges";
-import Contact from "./Contact/Contact";
-// import APropos from "./APropos/APropos";
-// import MentionsLegales from "./MentionsLegales/MentionsLegales";
-import { Footer } from "./ui/Footer";
-import Header from "./components/Header/Header";
-import Ranking from "./Ranking/Ranking";
+import Home from "./Pages/Home/Home";
+import Games from "./Pages/Games/Games";
+import GameDetails from "./Pages/Games/GameDetails";
+import Challenges from "./Pages/Challenges/Challenges";
+import MyChallenges from "./Pages/Challenges/MyChallenges";
+import About from "./Pages/About/About";
+import Contact from "./Pages/Contact/Contact";
+import Legal from "./Pages/Legal/Legal";
+
+import { Footer } from "./components/Footer/Footer";
+import Ranking from "./Pages/Ranking/Ranking";
 
 export default function App() {
 	return (
@@ -19,14 +19,14 @@ export default function App() {
 				<Header />
 				<Routes>
 					<Route path="/" element={<Home />} />
-					<Route path="/games" element={<Games />} />
-					<Route path="/games/:id" element={<GameDetails />} />
+					<Route path="/jeux" element={<Games />} />
+					<Route path="/jeux/:id" element={<GameDetails />} />
 					<Route path="/challenges" element={<Challenges />} />
-					<Route path="/my-challenges" element={<MyChallenges />} />
+					<Route path="/mes-challenges" element={<MyChallenges />} />
+					<Route path="/classement" element={<Ranking />} />
 					<Route path="/contact" element={<Contact />} />
-					<Route path="/ranking" element={<Ranking />} />
-					{/* <Route path="/a-propos" element={<APropos />} /> */}
-					{/* <Route path="/mentions-legales" element={<MentionsLegales />} />  */}
+					<Route path="/a-propos" element={<About />} />
+					<Route path="/mentions-legales" element={<Legal />} />
 				</Routes>
 				<Footer />
 			</div>
