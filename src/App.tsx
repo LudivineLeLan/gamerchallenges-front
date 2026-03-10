@@ -4,19 +4,20 @@ import Home from "./Pages/Home/Home";
 import Games from "./Pages/Games/Games";
 import GameDetails from "./Pages/Games/GameDetails";
 import Challenges from "./Pages/Challenges/Challenges";
+import ChallengeDetails from "./Pages/Challenges/ChallengeDetails";
 import MyChallenges from "./Pages/Challenges/MyChallenges";
 import About from "./Pages/About/About";
 import Contact from "./Pages/Contact/Contact";
 import Legal from "./Pages/Legal/Legal";
-import ChallengeDetails from "./Pages/Challenges/ChallengeDetails";
-
 import { Footer } from "./components/Footer/Footer";
 import Ranking from "./Pages/Ranking/Ranking";
+import Header from "./components/Header/Header";
 
 export default function App() {
 	return (
 		<BrowserRouter>
 			<div className="min-h-screen flex flex-col">
+				<Header />
 				<Routes>
 					<Route path="/" element={<Home />} />
 					<Route path="/jeux" element={<Games />} />
