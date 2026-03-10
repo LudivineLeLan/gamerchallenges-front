@@ -5,6 +5,7 @@ import Image from "../../ui/Image";
 import H1Title from "../../ui/H1Title";
 import { FaHeart } from "react-icons/fa";
 import Button from "../../ui/Button";
+import ReactPlayer from 'react-player'
 
 
 type ApiResponse = Challenge & { error?: string };
@@ -71,14 +72,13 @@ export default function ChallengeDetails() {
         )
     }
     return (
+
         <section
             className="p-2"
         >
             {/* Container */}
             <article
-                className="
-                     border-1 border-green-light rounded-xl text-p-mobile p-4
-                "
+                className="flex flex-col gap-4 border-1 border-green-light rounded-xl text-p-mobile p-4"
 
             >
                 {/* Titles, date and image */}
@@ -117,7 +117,7 @@ export default function ChallengeDetails() {
                             "
                     >
                         <span>{challenge.voteCounted}</span>
-                        <FaHeart className="text-white" />
+                        <FaHeart className="cursor-pointer text-white" />
                     </div>
                     <Button
                         label="uploader une vidéo"
@@ -133,7 +133,13 @@ export default function ChallengeDetails() {
                         <div
                             key={part.id}
                         >   
-                            <video src={part.url}></video>
+                            {/* ReactPlayer component used to show videom from youtube */}
+                            <ReactPlayer
+                                src={part.url}
+                                controls={true}
+                                width="100%"
+                                height="100%"
+                            />
                         </div>
                     ))}
                 </div>
