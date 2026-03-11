@@ -1,17 +1,21 @@
+// src/pages/SearchPage.jsx
 import { useEffect, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
+import Button from "../../ui/Button";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 function SearchPage() {
 	const { search } = useLocation();
 	const params = new URLSearchParams(search);
+
 	const query = params.get("q")?.toLowerCase() || "";
 	const category = params.get("category") || "Tous";
 
 	const [games, setGames] = useState([]);
 	const [challenges, setChallenges] = useState([]);
 	const [users, setUsers] = useState([]);
+
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
 
@@ -21,37 +25,46 @@ function SearchPage() {
 			setError(null);
 
 			try {
-				// Jeux
+				/* ----------- GAMES ----------- */
 				if (category === "Jeux" || category === "Tous") {
-					const resGames = await fetch(`${API_URL}/games`);
-					const dataGames = await resGames.json();
-					setGames(
-						dataGames.filter((game) =>
-							game.title.toLowerCase().includes(query),
-						),
+					const res = await fetch(`${API_URL}/games`);
+					const data = await res.json();
+
+					console.log("Games API response:", data);
+
+					const filteredGames = data.games.filter((game) =>
+						game.title.toLowerCase().includes(query),
 					);
+
+					setGames(filteredGames);
 				}
 
-				// Challenges
+				/* ----------- CHALLENGES ----------- */
 				if (category === "Challenges" || category === "Tous") {
-					const resChallenges = await fetch(`${API_URL}/challenges`);
-					const dataChallenges = await resChallenges.json();
-					setChallenges(
-						dataChallenges.filter((ch) =>
-							ch.title.toLowerCase().includes(query),
-						),
+					const res = await fetch(`${API_URL}/challenges`);
+					const data = await res.json();
+
+					console.log("Challenges API response:", data);
+
+					const filteredChallenges = data.filter((challenge) =>
+						challenge.name.toLowerCase().includes(query),
 					);
+
+					setChallenges(filteredChallenges);
 				}
 
-				// Users
+				/* ----------- USERS ----------- */
 				if (category === "Joueurs" || category === "Tous") {
-					const resUsers = await fetch(`${API_URL}/users`);
-					const dataUsers = await resUsers.json();
-					setUsers(
-						dataUsers.filter((user) =>
-							user.username.toLowerCase().includes(query),
-						),
+					const res = await fetch(`${API_URL}/users`);
+					const data = await res.json();
+
+					console.log("Users API response:", data);
+
+					const filteredUsers = data.filter((user) =>
+						user.username.toLowerCase().includes(query),
 					);
+
+					setUsers(filteredUsers);
 				}
 			} catch (err) {
 				console.error(err);
@@ -67,21 +80,22 @@ function SearchPage() {
 	}, [query, category]);
 
 	return (
-		<div className="p-4">
-			<h1 className="text-xl font-bold mb-4">Résultats pour : "{query}"</h1>
+		<div className="p-6">
+			<h1 className="text-xl font-bold mb-6">Résultats pour : "{query}"</h1>
 
-			{loading && <p>Chargement des résultats...</p>}
+			{loading && <p>Chargement...</p>}
 			{error && <p className="text-red-500">{error}</p>}
 
-			{/* Jeux */}
+			{/* ----------- GAMES ----------- */}
 			{(category === "Jeux" || category === "Tous") && (
-				<section className="mb-4">
-					<h2 className="text-lg font-semibold">Jeux</h2>
+				<section className="mb-6">
+					<h2 className="text-lg font-semibold mb-2">Jeux</h2>
+
 					{games.length ? (
 						games.map((game) => (
 							<div key={game.id}>
 								<Link to={`/games/${game.id}`} className="hover:underline">
-									{game.name}
+									{game.title}
 								</Link>
 							</div>
 						))
@@ -91,15 +105,19 @@ function SearchPage() {
 				</section>
 			)}
 
-			{/* Challenges */}
+			{/* ----------- CHALLENGES ----------- */}
 			{(category === "Challenges" || category === "Tous") && (
-				<section className="mb-4">
-					<h2 className="text-lg font-semibold">Challenges</h2>
+				<section className="mb-6">
+					<h2 className="text-lg font-semibold mb-2">Challenges</h2>
+
 					{challenges.length ? (
-						challenges.map((ch) => (
-							<div key={ch.id}>
-								<Link to={`/challenges/${ch.id}`} className="hover:underline">
-									{ch.title}
+						challenges.map((challenge) => (
+							<div key={challenge.id}>
+								<Link
+									to={`/challenges/${challenge.id}`}
+									className="hover:underline"
+								>
+									{challenge.name}
 								</Link>
 							</div>
 						))
@@ -109,10 +127,11 @@ function SearchPage() {
 				</section>
 			)}
 
-			{/* Users */}
+			{/* ----------- USERS ----------- */}
 			{(category === "Joueurs" || category === "Tous") && (
-				<section className="mb-4">
-					<h2 className="text-lg font-semibold">Joueurs</h2>
+				<section>
+					<h2 className="text-lg font-semibold mb-2">Joueurs</h2>
+
 					{users.length ? (
 						users.map((user) => (
 							<div key={user.id}>
@@ -126,6 +145,12 @@ function SearchPage() {
 					)}
 				</section>
 			)}
+
+			<div className="flex justify-center mt-10 w-full">
+				<Link to="/">
+					<Button label="Retour" type="button" />
+				</Link>
+			</div>
 		</div>
 	);
 }

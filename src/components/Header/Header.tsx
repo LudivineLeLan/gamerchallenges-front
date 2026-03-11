@@ -21,12 +21,13 @@ function Header() {
 			<div className="w-full bg-linear-to-t from-green-dark to-green-medium px-4 py-2 flex items-center justify-between rounded-full">
 				{/* Logo + login */}
 				<div className="flex items-center gap-2 lg:gap-4">
-					<img
-						src={manette}
-						alt="manette"
-						className="w-12 h-12 lg:w-16 lg:h-16 object-contain"
-					/>
-
+					<Link to="/">
+						<img
+							src={manette}
+							alt="manette"
+							className="w-12 h-12 lg:w-16 lg:h-16 object-contain"
+						/>
+					</Link>
 					<Link
 						to="/login"
 						className="hidden lg:block text-white font-semibold hover:text-green-light transition"
