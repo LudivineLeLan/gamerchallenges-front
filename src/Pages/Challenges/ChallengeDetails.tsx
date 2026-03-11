@@ -79,12 +79,12 @@ export default function ChallengeDetails() {
         >
             {/* Container */}
             <article
-                className="flex flex-col gap-6 border-1 border-green-light rounded-xl text-p-mobile p-4"
+                className="flex flex-col gap-6 border-3 border-green-light rounded-xl text-p-mobile p-4"
 
             >
                 {/* Titles, date and image */}
                 <div
-                    className="flex flex-col gap-3"
+                    className="flex flex-col gap-3 items-center"
                 >
                     <Image
                         src={challenge.game?.cover || ""}
@@ -141,7 +141,7 @@ export default function ChallengeDetails() {
                                 className="
                                     border border-green-light rounded-lg overflow-hidden flex items-center justify-center h-[80px]"
                             >
-                                {/* ReactPlayer component used to show videom from youtube */}
+                                {/* ReactPlayer component used to show video from youtube */}
                                 <ReactPlayer
                                     src={part.url}
                                     controls={true}
