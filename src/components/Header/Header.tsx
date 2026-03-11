@@ -18,7 +18,6 @@ function Header() {
   return (
     <header className="hidden min-[1080px]:flex w-full mt-4 px-4">
       <div className="w-full bg-linear-to-t from-green-dark to-green-medium px-4 py-2 flex items-center justify-between rounded-full">
-
         {/* Logo + login */}
         <div className="flex items-center gap-2 lg:gap-4">
           <img
@@ -29,15 +28,14 @@ function Header() {
 
           <Link
             to="/login"
-            className="hidden lg:block text-white font-semibold hover:text-green-light transition"
-          >
+            className="hidden lg:block text-white font-semibold hover:text-green-light transition">
             INSCRIPTION / CONNEXION
           </Link>
         </div>
 
         {/* Links */}
         <nav className="hidden lg:flex gap-6 xl:gap-8 text-white font-semibold text-center">
-          <Link to="/games" className="hover:text-green-light">
+          <Link to="/jeux" className="hover:text-green-light">
             JEUX
           </Link>
 
@@ -45,14 +43,13 @@ function Header() {
             CHALLENGES
           </Link>
 
-          <Link to="/ranking" className="hover:text-green-light">
+          <Link to="/classement" className="hover:text-green-light">
             CLASSEMENT
           </Link>
         </nav>
 
         {/* Searchbar */}
         <div className="flex items-center gap-2 lg:gap-3">
-
           <input
             type="text"
             placeholder="Rechercher..."
@@ -72,11 +69,13 @@ function Header() {
 
           <button
             onClick={handleSearch}
-            className="bg-green-light w-9 h-9 lg:w-10 lg:h-10 flex items-center justify-center rounded-full"
-          >
-            <Icon icon="mdi:magnify" className=" hover:text-green-dark transition-colors" width="24" />
+            className="bg-green-light w-9 h-9 lg:w-10 lg:h-10 flex items-center justify-center rounded-full">
+            <Icon
+              icon="mdi:magnify"
+              className=" hover:text-green-dark transition-colors"
+              width="24"
+            />
           </button>
-
         </div>
       </div>
     </header>
