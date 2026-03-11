@@ -37,7 +37,7 @@ function Header() {
 
 				{/* Links */}
 				<nav className="hidden lg:flex gap-6 xl:gap-8 text-white font-semibold text-center">
-					<Link to="/games" className="hover:text-green-light">
+					<Link to="/jeux" className="hover:text-green-light">
 						JEUX
 					</Link>
 
@@ -45,7 +45,7 @@ function Header() {
 						CHALLENGES
 					</Link>
 
-					<Link to="/ranking" className="hover:text-green-light">
+					<Link to="/classement" className="hover:text-green-light">
 						CLASSEMENT
 					</Link>
 				</nav>
