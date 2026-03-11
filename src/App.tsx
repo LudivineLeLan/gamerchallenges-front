@@ -11,25 +11,27 @@ import Legal from "./Pages/Legal/Legal";
 import { Footer } from "./components/Footer/Footer";
 import Ranking from "./Pages/Ranking/Ranking";
 import Header from "./components/Header/Header";
+import Auth from "./Pages/Authentication/Auth";
 
 export default function App() {
-	return (
-		<BrowserRouter>
-			<div className="min-h-screen flex flex-col">
-				<Header />
-				<Routes>
-					<Route path="/" element={<Home />} />
-					<Route path="/jeux" element={<Games />} />
-					<Route path="/jeux/:id" element={<GameDetails />} />
-					<Route path="/challenges" element={<Challenges />} />
-					<Route path="/mes-challenges" element={<MyChallenges />} />
-					<Route path="/classement" element={<Ranking />} />
-					<Route path="/contact" element={<Contact />} />
-					<Route path="/a-propos" element={<About />} />
-					<Route path="/mentions-legales" element={<Legal />} />
-				</Routes>
-				<Footer />
-			</div>
-		</BrowserRouter>
-	);
+  return (
+    <BrowserRouter>
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/jeux" element={<Games />} />
+          <Route path="/jeux/:id" element={<GameDetails />} />
+          <Route path="/challenges" element={<Challenges />} />
+          <Route path="/mes-challenges" element={<MyChallenges />} />
+          <Route path="/classement" element={<Ranking />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/a-propos" element={<About />} />
+          <Route path="/mentions-legales" element={<Legal />} />
+          <Route path="/auth" element={<Auth />} />
+        </Routes>
+        <Footer />
+      </div>
+    </BrowserRouter>
+  );
 }

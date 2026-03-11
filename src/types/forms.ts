@@ -24,7 +24,7 @@ export type LoginFormData = {
 // Type for Register form data with no need to put the avatar logic
 export type RegisterFormData = {
   email: string;
-  nickname: string;
+  username: string;
   password: string;
   acceptPolicy: boolean;
   avatar?: File; // optional because the user can choose not to upload an avatar, its already handled in the service, also in the backend...

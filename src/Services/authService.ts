@@ -35,7 +35,7 @@ export const registerUser = async (dataForm: RegisterFormData) => {
 
   const formData = new FormData();
   formData.append("email", dataForm.email);
-  formData.append("nickname", dataForm.nickname);
+  formData.append("username", dataForm.username);
   formData.append("password", dataForm.password);
   formData.append("acceptPolicy", String(dataForm.acceptPolicy));
   // we can add the avatar only if the user has uploaded one, because it's optional

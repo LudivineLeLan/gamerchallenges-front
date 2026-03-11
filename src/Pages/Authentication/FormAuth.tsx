@@ -1,7 +1,10 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser, registerUser } from "../../Services/authService";
-
+import SuccessMessage from "../../ui/SuccessMessage";
+import Input from "../../ui/Input";
+import ErrorSummary from "../../ui/ErrorSummary";
+import Button from "../../ui/Button";
 // Types
 import type {
   LoginFormData,
@@ -24,7 +27,7 @@ export default function FormAuth({ mode }: FormAuthProps) {
       ? { email: "", password: "" }
       : {
           email: "",
-          nickname: "",
+          username: "",
           password: "",
           acceptPolicy: false,
           avatar: undefined,
@@ -38,10 +41,14 @@ export default function FormAuth({ mode }: FormAuthProps) {
     FormErrors<LoginFormData> | FormErrors<RegisterFormData>
   >({});
 
+  const [success, setSuccessMessage] = useState<string>("");
+
   // -----------------------------------------------------
   // 3) Gestion des inputs texte
   // -----------------------------------------------------
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -77,7 +84,7 @@ export default function FormAuth({ mode }: FormAuthProps) {
     if (mode === "register") {
       const data = formData as RegisterFormData;
 
-      if (!data.nickname) newErrors.nickname = "Pseudo obligatoire.";
+      if (!data.username) newErrors.username = "Nom d'utilisateur obligatoire.";
       if (!data.acceptPolicy)
         newErrors.isChecked = "Vous devez accepter la politique.";
     }
@@ -89,7 +96,7 @@ export default function FormAuth({ mode }: FormAuthProps) {
   // -----------------------------------------------------
   // 7) Submit dynamique selon le mode
   // -----------------------------------------------------
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!validate()) return;
@@ -98,10 +105,14 @@ export default function FormAuth({ mode }: FormAuthProps) {
       if (mode === "login") {
         const data = await loginUser(formData as LoginFormData);
         localStorage.setItem("token", data.token);
-        navigate("/dashboard");
+        navigate("/mon-compte");
       } else {
         await registerUser(formData as RegisterFormData);
-        navigate("/login");
+
+        setSuccessMessage("Inscription réussie !");
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
       }
     } catch (err: any) {
       setErrors({ server: err.message });
@@ -112,74 +123,79 @@ export default function FormAuth({ mode }: FormAuthProps) {
   // 8) Rendu JSX
   // -----------------------------------------------------
   return (
-    <form onSubmit={handleSubmit} className="auth-form">
-      {/* Email */}
-      <input
-        type="email"
-        name="email"
-        placeholder="Email"
-        value={formData.email}
-        onChange={handleChange}
-      />
-      {errors.email && <p className="error">{errors.email}</p>}
+    <>
+      <SuccessMessage success={success} />
 
-      {/* Nickname (register only) */}
-      {mode === "register" && (
-        <>
-          <input
-            type="text"
-            name="nickname"
-            placeholder="Pseudo"
-            value={(formData as RegisterFormData).nickname}
-            onChange={handleChange}
-          />
+      <form onSubmit={handleSubmit} className="auth-form">
+        {/* Email */}
+        <Input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={formData.email}
+          onChange={handleChange}
+        />
+        {errors.email && <p className="error">{errors.email}</p>}
 
-          {(errors as FormErrors<RegisterFormData>).nickname && (
-            <p className="error">
-              {(errors as FormErrors<RegisterFormData>).nickname}
-            </p>
-          )}
-        </>
-      )}
-
-      {/* Password */}
-      <input
-        type="password"
-        name="password"
-        placeholder="Mot de passe"
-        value={formData.password}
-        onChange={handleChange}
-      />
-      {errors.password && <p className="error">{errors.password}</p>}
-
-      {/* Avatar (register only) */}
-      {mode === "register" && (
-        <>
-          <input type="file" name="avatar" onChange={handleFileChange} />
-        </>
-      )}
-
-      {/* Accept policy (register only) */}
-      {mode === "register" && (
-        <>
-          <label>
-            <input
-              type="checkbox"
-              checked={(formData as RegisterFormData).acceptPolicy}
-              onChange={handleCheckbox}
+        {/* Nickname (register only) */}
+        {mode === "register" && (
+          <>
+            <Input
+              type="text"
+              name="username"
+              placeholder="Pseudo"
+              value={(formData as RegisterFormData).username}
+              onChange={handleChange}
             />
-            J’accepte la politique de confidentialité
-          </label>
-          {errors.isChecked && <p className="error">{errors.isChecked}</p>}
-        </>
-      )}
+            {(errors as FormErrors<RegisterFormData>).username && (
+              <p className="error">
+                {(errors as FormErrors<RegisterFormData>).username}
+              </p>
+            )}
+          </>
+        )}
 
-      {/* Erreur serveur */}
-      {errors.server && <p className="error">{errors.server}</p>}
+        {/* Password */}
+        <Input
+          type="password"
+          name="password"
+          placeholder="Mot de passe"
+          value={formData.password}
+          onChange={handleChange}
+        />
+        {errors.password && <p className="error">{errors.password}</p>}
 
-      <button type="submit">
-        {mode === "login" ? "Se connecter" : "Créer un compte"}
-      </button>
-    </form>
+        {/* Avatar (register only) */}
+        {mode === "register" && (
+          <input type="file" name="avatar" onChange={handleFileChange} />
+        )}
+
+        {/* Accept policy (register only) */}
+        {mode === "register" && (
+          <>
+            <label>
+              <Input
+                type="checkbox"
+                name="acceptPolicy"
+                checked={(formData as RegisterFormData).acceptPolicy}
+                onChange={handleCheckbox}
+              />
+              J’accepte la politique de confidentialité
+            </label>
+            {errors.isChecked && <p className="error">{errors.isChecked}</p>}
+          </>
+        )}
+
+        {/* Erreur serveur */}
+        {errors.server && <p className="error">{errors.server}</p>}
+
+        <Button
+          label={mode === "login" ? "Se connecter" : "Créer un compte"}
+          type="submit"
+        />
+      </form>
+
+      <ErrorSummary errors={errors} />
+    </>
   );
 }
