@@ -232,6 +232,7 @@ export default function MonCompte({ userId }: MonCompteProps) {
 					{/* Other editable fields */}
 					{renderField("Pseudo", "username")}
 					{renderField("Email", "email", "email")}
+					<Button label="Modifier mon mot de passe" type="button" />
 					{renderField("Jeu préféré", "favouriteGame")}
 					{renderField("Twitch", "twitch")}
 					{renderField("YouTube", "youtube")}
