@@ -30,41 +30,29 @@ function SearchPage() {
 				if (category === "Jeux" || category === "Tous") {
 					const res = await fetch(`${API_URL}/games`);
 					const data = await res.json();
-
-					console.log("Games API response:", data);
-
 					const filteredGames = data.games.filter((game) =>
 						game.title.toLowerCase().includes(query),
 					);
-
 					setGames(filteredGames);
 				}
 
-				/*  CHALLENGES  */
+				/* CHALLENGES */
 				if (category === "Challenges" || category === "Tous") {
 					const res = await fetch(`${API_URL}/challenges`);
 					const data = await res.json();
-
-					console.log("Challenges API response:", data);
-
 					const filteredChallenges = data.filter((challenge) =>
 						challenge.name.toLowerCase().includes(query),
 					);
-
 					setChallenges(filteredChallenges);
 				}
 
-				/* USERS*/
+				/* USERS */
 				if (category === "Joueurs" || category === "Tous") {
 					const res = await fetch(`${API_URL}/users`);
 					const data = await res.json();
-
-					console.log("Users API response:", data);
-
 					const filteredUsers = data.filter((user) =>
 						user.username.toLowerCase().includes(query),
 					);
-
 					setUsers(filteredUsers);
 				}
 			} catch (err) {
@@ -81,68 +69,91 @@ function SearchPage() {
 	}, [query, category]);
 
 	return (
-		<div className="p-6">
-			<h1 className="text-xl font-bold mb-6">Résultats pour : "{query}"</h1>
+		<div className="p-6 flex flex-col items-center min-h-screen">
+			<h1 className="text-2xl md:text-3xl font-bold mb-6 text-center">
+				Résultats pour : "{query}"
+			</h1>
 
 			{loading && <p>Chargement...</p>}
 			{error && <p className="text-red-500">{error}</p>}
 
 			{/* GAMES */}
 			{(category === "Jeux" || category === "Tous") && (
-				<section className="mb-6">
+				<section className="mb-8 flex flex-col items-center w-full max-w-md">
+					<p className="mb-4 text-sm text-gray-300 text-center">
+						{games.length} résultat(s)
+					</p>
 					{games.length > 0 ? (
 						games.map((game) => (
 							<Link
 								key={game.id}
-								to={`/games/${game.id}`}
-								className="flex items-center gap-3 mb-3 hover:opacity-80"
+								to={`/jeux/${game.id}`}
+								className="flex flex-col items-center gap-2 mb-6 p-4 rounded-lg w-full"
 							>
-								<Image src={game.cover} alt={game.title} />
+								<Image
+									src={game.cover}
+									alt={game.title}
+									className="w-full rounded-lg"
+								/>
 								<H2>{game.title}</H2>
 							</Link>
 						))
 					) : (
-						<p>Aucun jeu trouvé</p>
+						<p className="text-center">Aucun jeu trouvé</p>
 					)}
 				</section>
 			)}
 
 			{/* CHALLENGES */}
 			{(category === "Challenges" || category === "Tous") && (
-				<section className="mb-6">
+				<section className="mb-8 flex flex-col items-center w-full max-w-md">
+					<p className="mb-4 text-sm text-gray-300 text-center">
+						{challenges.length} résultat(s)
+					</p>
 					{challenges.length > 0 ? (
 						challenges.map((challenge) => (
 							<Link
 								key={challenge.id}
 								to={`/challenges/${challenge.id}`}
-								className="flex items-center gap-3 mb-3 hover:opacity-80"
+								className="flex flex-col items-center gap-2 mb-6 p-4 rounded-lg w-full"
 							>
-								<Image src={challenge.game.cover} alt={challenge.name} />
+								<Image
+									src={challenge.game.cover}
+									alt={challenge.name}
+									className="w-full rounded-lg"
+								/>
 								<H2>{challenge.name}</H2>
 							</Link>
 						))
 					) : (
-						<p>Aucun challenge trouvé</p>
+						<p className="text-center">Aucun challenge trouvé</p>
 					)}
 				</section>
 			)}
 
-			{/*  USERS */}
+			{/* USERS */}
 			{(category === "Joueurs" || category === "Tous") && (
-				<section>
+				<section className="mb-8 flex flex-col items-center w-full max-w-md">
+					<p className="mb-4 text-sm text-gray-300 text-center">
+						{users.length} résultat(s)
+					</p>
 					{users.length > 0 ? (
 						users.map((user) => (
 							<Link
 								key={user.id}
 								to={`/users/${user.id}`}
-								className="flex items-center gap-3 mb-3 hover:opacity-80"
+								className="flex flex-col items-center gap-2 mb-6 p-4 rounded-lg w-full"
 							>
-								<Image src={user.avatar} alt={user.username} />
+								<Image
+									src={user.avatar}
+									alt={user.username}
+									className="w-24 h-24 rounded-full"
+								/>
 								<H2>{user.username}</H2>
 							</Link>
 						))
 					) : (
-						<p>Aucun joueur trouvé</p>
+						<p className="text-center">Aucun joueur trouvé</p>
 					)}
 				</section>
 			)}
