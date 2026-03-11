@@ -1,7 +1,8 @@
-// src/pages/SearchPage.jsx
 import { useEffect, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 import Button from "../../ui/Button";
+import Image from "../../ui/Image";
+import H2 from "../../ui/H2";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -25,7 +26,7 @@ function SearchPage() {
 			setError(null);
 
 			try {
-				/* ----------- GAMES ----------- */
+				/* GAMES */
 				if (category === "Jeux" || category === "Tous") {
 					const res = await fetch(`${API_URL}/games`);
 					const data = await res.json();
@@ -39,7 +40,7 @@ function SearchPage() {
 					setGames(filteredGames);
 				}
 
-				/* ----------- CHALLENGES ----------- */
+				/*  CHALLENGES  */
 				if (category === "Challenges" || category === "Tous") {
 					const res = await fetch(`${API_URL}/challenges`);
 					const data = await res.json();
@@ -53,7 +54,7 @@ function SearchPage() {
 					setChallenges(filteredChallenges);
 				}
 
-				/* ----------- USERS ----------- */
+				/* USERS*/
 				if (category === "Joueurs" || category === "Tous") {
 					const res = await fetch(`${API_URL}/users`);
 					const data = await res.json();
@@ -86,18 +87,19 @@ function SearchPage() {
 			{loading && <p>Chargement...</p>}
 			{error && <p className="text-red-500">{error}</p>}
 
-			{/* ----------- GAMES ----------- */}
+			{/* GAMES */}
 			{(category === "Jeux" || category === "Tous") && (
 				<section className="mb-6">
-					<h2 className="text-lg font-semibold mb-2">Jeux</h2>
-
-					{games.length ? (
+					{games.length > 0 ? (
 						games.map((game) => (
-							<div key={game.id}>
-								<Link to={`/games/${game.id}`} className="hover:underline">
-									{game.title}
-								</Link>
-							</div>
+							<Link
+								key={game.id}
+								to={`/games/${game.id}`}
+								className="flex items-center gap-3 mb-3 hover:opacity-80"
+							>
+								<Image src={game.cover} alt={game.title} />
+								<H2>{game.title}</H2>
+							</Link>
 						))
 					) : (
 						<p>Aucun jeu trouvé</p>
@@ -105,21 +107,19 @@ function SearchPage() {
 				</section>
 			)}
 
-			{/* ----------- CHALLENGES ----------- */}
+			{/* CHALLENGES */}
 			{(category === "Challenges" || category === "Tous") && (
 				<section className="mb-6">
-					<h2 className="text-lg font-semibold mb-2">Challenges</h2>
-
-					{challenges.length ? (
+					{challenges.length > 0 ? (
 						challenges.map((challenge) => (
-							<div key={challenge.id}>
-								<Link
-									to={`/challenges/${challenge.id}`}
-									className="hover:underline"
-								>
-									{challenge.name}
-								</Link>
-							</div>
+							<Link
+								key={challenge.id}
+								to={`/challenges/${challenge.id}`}
+								className="flex items-center gap-3 mb-3 hover:opacity-80"
+							>
+								<Image src={challenge.game.cover} alt={challenge.name} />
+								<H2>{challenge.name}</H2>
+							</Link>
 						))
 					) : (
 						<p>Aucun challenge trouvé</p>
@@ -127,18 +127,19 @@ function SearchPage() {
 				</section>
 			)}
 
-			{/* ----------- USERS ----------- */}
+			{/*  USERS */}
 			{(category === "Joueurs" || category === "Tous") && (
 				<section>
-					<h2 className="text-lg font-semibold mb-2">Joueurs</h2>
-
-					{users.length ? (
+					{users.length > 0 ? (
 						users.map((user) => (
-							<div key={user.id}>
-								<Link to={`/users/${user.id}`} className="hover:underline">
-									{user.username}
-								</Link>
-							</div>
+							<Link
+								key={user.id}
+								to={`/users/${user.id}`}
+								className="flex items-center gap-3 mb-3 hover:opacity-80"
+							>
+								<Image src={user.avatar} alt={user.username} />
+								<H2>{user.username}</H2>
+							</Link>
 						))
 					) : (
 						<p>Aucun joueur trouvé</p>
