@@ -10,9 +10,10 @@ import Contact from "./Pages/Contact/Contact";
 import Legal from "./Pages/Legal/Legal";
 import { Footer } from "./components/Footer/Footer";
 import Ranking from "./Pages/Ranking/Ranking";
-import MyAccount from "./Pages/My-Account/my-account";
+import MyAccount from "./Pages/My-Account/My-account";
 import BurgerMenu from "./components/MenuBurger/MenuBurger";
 import Header from "./components/Header/Header";
+import SearchPage from "./Pages/SearchPage/SearchPage";
 
 export default function App() {
 	return (
@@ -32,6 +33,7 @@ export default function App() {
 					<Route path="/contact" element={<Contact />} />
 					<Route path="/a-propos" element={<About />} />
 					<Route path="/mentions-legales" element={<Legal />} />
+					<Route path="/recherche" element={<SearchPage />} />
 				</Routes>
 				<Footer />
 			</div>

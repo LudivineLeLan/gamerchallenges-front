@@ -27,11 +27,11 @@ type UserForm = {
 	avatar: File | null;
 };
 
-type MonCompteProps = {
+type MyAccountProps = {
 	userId: number;
 };
 
-export default function MonCompte({ userId }: MonCompteProps) {
+export default function MyAccount({ userId }: MyAccountProps) {
 	const navigate = useNavigate();
 	const [user, setUser] = useState<User | null>(null);
 	const [loading, setLoading] = useState(true);
