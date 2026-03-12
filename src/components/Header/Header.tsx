@@ -5,17 +5,15 @@ import { useState } from "react";
 
 function Header() {
 	const [search, setSearch] = useState("");
-<<<<<<< HEAD
 	const [category, setCategory] = useState("Jeux"); // new state for categories
-=======
->>>>>>> dev
 	const navigate = useNavigate();
 
 	const handleSearch = () => {
 		console.log("Recherche :", search);
 
 		if (search.trim() !== "") {
-			navigate(`/search?category=${category}&q=${search}`);
+			navigate(`/recherche?category=${category}&q=${search}`);
+			setSearch(""); // clear the search input
 		}
 	};
 

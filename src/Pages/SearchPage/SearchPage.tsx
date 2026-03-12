@@ -24,6 +24,11 @@ function SearchPage() {
 		const fetchResults = async () => {
 			setLoading(true);
 			setError(null);
+			setGames([]);
+			setChallenges([]);
+			setUsers([]);
+			setLoading(true);
+			setError(null);
 
 			try {
 				/* GAMES */
@@ -50,6 +55,7 @@ function SearchPage() {
 				if (category === "Joueurs" || category === "Tous") {
 					const res = await fetch(`${API_URL}/users`);
 					const data = await res.json();
+					console.log(data);
 					const filteredUsers = data.filter((user) =>
 						user.username.toLowerCase().includes(query),
 					);
@@ -68,10 +74,12 @@ function SearchPage() {
 		fetchResults();
 	}, [query, category]);
 
+	const totalResults = games.length + challenges.length + users.length;
+
 	return (
 		<div className="p-6 flex flex-col items-center min-h-screen">
 			<h1 className="text-2xl md:text-3xl font-bold mb-6 text-center">
-				Résultats pour : "{query}"
+				Recherche : {totalResults} résultat{totalResults > 1 ? "s" : ""}
 			</h1>
 
 			{loading && <p>Chargement...</p>}
@@ -79,22 +87,16 @@ function SearchPage() {
 
 			{/* GAMES */}
 			{(category === "Jeux" || category === "Tous") && (
-				<section className="mb-8 flex flex-col items-center w-full max-w-md">
-					<p className="mb-4 text-sm text-gray-300 text-center">
-						{games.length} résultat(s)
-					</p>
+				<section className="mb-8 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 w-full max-w-6xl">
+					{" "}
 					{games.length > 0 ? (
 						games.map((game) => (
 							<Link
 								key={game.id}
 								to={`/jeux/${game.id}`}
-								className="flex flex-col items-center gap-2 mb-6 p-4 rounded-lg w-full"
+								className="flex flex-col items-center gap-2 p-4 rounded-lg w-full"
 							>
-								<Image
-									src={game.cover}
-									alt={game.title}
-									className="w-full rounded-lg"
-								/>
+								<Image src={game.cover} alt={game.title} />
 								<H2>{game.title}</H2>
 							</Link>
 						))
@@ -106,22 +108,15 @@ function SearchPage() {
 
 			{/* CHALLENGES */}
 			{(category === "Challenges" || category === "Tous") && (
-				<section className="mb-8 flex flex-col items-center w-full max-w-md">
-					<p className="mb-4 text-sm text-gray-300 text-center">
-						{challenges.length} résultat(s)
-					</p>
+				<section className="mb-8 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 w-full max-w-6xl">
 					{challenges.length > 0 ? (
 						challenges.map((challenge) => (
 							<Link
 								key={challenge.id}
 								to={`/challenges/${challenge.id}`}
-								className="flex flex-col items-center gap-2 mb-6 p-4 rounded-lg w-full"
+								className="flex flex-col items-center gap-2 p-4 rounded-lg w-full"
 							>
-								<Image
-									src={challenge.game.cover}
-									alt={challenge.name}
-									className="w-full rounded-lg"
-								/>
+								<Image src={challenge.game.cover} alt={challenge.name} />
 								<H2>{challenge.name}</H2>
 							</Link>
 						))
@@ -133,22 +128,15 @@ function SearchPage() {
 
 			{/* USERS */}
 			{(category === "Joueurs" || category === "Tous") && (
-				<section className="mb-8 flex flex-col items-center w-full max-w-md">
-					<p className="mb-4 text-sm text-gray-300 text-center">
-						{users.length} résultat(s)
-					</p>
+				<section className="mb-8 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 w-full max-w-6xl">
 					{users.length > 0 ? (
 						users.map((user) => (
 							<Link
 								key={user.id}
 								to={`/users/${user.id}`}
-								className="flex flex-col items-center gap-2 mb-6 p-4 rounded-lg w-full"
+								className="flex flex-col items-center gap-2 p-4 rounded-lg w-full"
 							>
-								<Image
-									src={user.avatar}
-									alt={user.username}
-									className="w-24 h-24 rounded-full"
-								/>
+								<Image src={user.avatar} alt={user.username} />
 								<H2>{user.username}</H2>
 							</Link>
 						))
