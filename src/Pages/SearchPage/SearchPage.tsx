@@ -94,10 +94,12 @@ function SearchPage() {
 							<Link
 								key={game.id}
 								to={`/jeux/${game.id}`}
-								className="flex flex-col items-center gap-2 p-4 rounded-lg w-full"
+								className="flex flex-col items-center gap-2 p-4 rounded-lg w-full "
 							>
 								<Image src={game.cover} alt={game.title} />
-								<H2>{game.title}</H2>
+								<div className="w-full truncate text-center">
+									<H2>{game.title}</H2>
+								</div>
 							</Link>
 						))
 					) : (
@@ -117,7 +119,9 @@ function SearchPage() {
 								className="flex flex-col items-center gap-2 p-4 rounded-lg w-full"
 							>
 								<Image src={challenge.game.cover} alt={challenge.name} />
-								<H2>{challenge.name}</H2>
+								<div className="w-full truncate text-center">
+									<H2>{challenge.name}</H2>
+								</div>
 							</Link>
 						))
 					) : (
@@ -137,7 +141,9 @@ function SearchPage() {
 								className="flex flex-col items-center gap-2 p-4 rounded-lg w-full"
 							>
 								<Image src={user.avatar} alt={user.username} />
-								<H2>{user.username}</H2>
+								<div className="w-full truncate text-center">
+									<H2>{user.username}</H2>
+								</div>
 							</Link>
 						))
 					) : (
