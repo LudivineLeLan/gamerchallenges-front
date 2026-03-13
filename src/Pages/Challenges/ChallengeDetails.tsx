@@ -74,12 +74,13 @@ export default function ChallengeDetails() {
     return (
 
         <section
-            className="p-2"
+            className="p-2 lg:p-8"
         >
             {/* Container */}
             <article
                 className="flex flex-col gap-6 border-3 border-green-light rounded-xl text-p-mobile items-center p-4
-                lg:max-w-[1200px] lg:mx-auto lg:border-4 lg:rounded-3xl"
+                md:max-w-[600px] md:mx-auto
+                lg:max-w-[1000px] lg:border-4 lg:rounded-3xl lg:w-[75%]"
 
             >
                 {/* Titles, date and image */}
@@ -134,19 +135,23 @@ export default function ChallengeDetails() {
                 {/* PARTICIPATIONS */}
                 <div
                     className="
-                        flex flex-col gap-6 items-center max-w-[380px]
-                        md:max-w-[600px]"
+                        flex flex-col gap-6 items-center w-[90%] max-w-[370px] mx-auto
+                        md:grid-cols-2 md:w-[70%] md:max-w-[600px]
+                        lg:max-w-[800px]"
                 >
                     <H2 label="Participations des autres joueurs" />
                     <div
-                        className="grid grid-cols-2 gap-6"
+                        className="grid grid-cols-1  gap-6 w-full"
                     >
-                        {challenge.participations?.slice(0,2).map((part) => (
+                        {challenge.participations?.slice(0, 4).map((part, index) => (
                             <div
                                 key={part.id}
-                                className="
-                                    relative w-full border border-green-light rounded-lg overflow-hidden  h-[90px]
-                                    md:h-[180px]"
+                                className={`
+                                    relative w-full border border-green-light rounded-lg overflow-hidden aspect-video
+                                    ${index === 1 ? "hidden md:block" : ""} 
+                                    ${index === 2 ? "hidden lg:block" : ""} 
+                                    ${index === 3 ? "hidden lg:block" : ""}
+                                `}
                             >
                                 {/* ReactPlayer component used to show video from youtube */}
                                 <ReactPlayer
