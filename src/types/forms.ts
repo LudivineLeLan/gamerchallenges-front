@@ -15,6 +15,11 @@ export type LoginUserInputs = {
   password: string;
 };
 
+// Input required to share participation 
+export type ParticipationInput = {
+  url: string;
+}
+
 // Type for Login form data more specific
 export type LoginFormData = {
   email: string;
@@ -32,6 +37,9 @@ export type RegisterFormData = {
 
 // Merged BaseUserInputs with ContactUserInputs to export only one type
 export type ContactFormData = BaseUserInputs & ContactUserInputs;
+
+// Create new type from BaseUsersInput & ParticipationInputs 
+export type ParticipationFormData = BaseUserInputs & ParticipationInput;
 
 // Type for errors in form
 // <T> is a parameter it can be replaced by the form needed
