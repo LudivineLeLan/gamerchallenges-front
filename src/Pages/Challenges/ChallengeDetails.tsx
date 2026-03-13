@@ -141,7 +141,7 @@ export default function ChallengeDetails() {
                     <div
                         className="grid grid-cols-2 gap-6"
                     >
-                        {challenge.participations?.map((part) => (
+                        {challenge.participations?.slice(0,2).map((part) => (
                             <div
                                 key={part.id}
                                 className="
