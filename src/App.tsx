@@ -16,6 +16,7 @@ import BurgerMenu from "./components/MenuBurger/MenuBurger";
 import Header from "./components/Header/Header";
 import SearchPage from "./Pages/SearchPage/SearchPage";
 import ParticipationsByChallenge from "./Pages/Participations/ParticipationsByChallenge";
+import Auth from "./Pages/Authentication/Auth";
 
 export default function App() {
 	return (
@@ -28,7 +29,7 @@ export default function App() {
 					<Route path="/jeux/:id" element={<GameDetails />} />
 					<Route path="/challenges" element={<Challenges />} />
 					<Route path="/challenges/:id" element={<ChallengeDetails />} />
-					<Route path="/challenges/:id/participations" element={<ParticipationsByChallenge/>} />
+					<Route path="/challenges/:id/participations" element={<ParticipationsByChallenge />} />
 					<Route path="/mon-compte" element={<MyAccount userId={3} />} /> //
 					user id ne restera pas là, c'est en attendant d'avoir un système
 					d'auth
@@ -38,6 +39,7 @@ export default function App() {
 					<Route path="/a-propos" element={<About />} />
 					<Route path="/mentions-legales" element={<Legal />} />
 					<Route path="/recherche" element={<SearchPage />} />
+					<Route path="/auth" element={<Auth />} />
 				</Routes>
 				<Footer />
 			</div>
