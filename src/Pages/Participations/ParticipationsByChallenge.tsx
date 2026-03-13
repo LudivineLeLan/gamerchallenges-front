@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom"
 import type { Challenge } from "../../types/models";
 import H1Title from "../../ui/H1Title";
 import ReactPlayer from 'react-player'
+import Pagination from "../../ui/Pagination";
 
 type ApiReponse = Challenge & { error?: string };
 
@@ -14,6 +15,14 @@ export default function ParticipationsByChallenge() {
     // --- STATES INITIALIZATION --- 
     const [challenge, setChallenge] = useState<Challenge | null>(null);
     const [error, setError] = useState<string | null>(null);
+
+    // --- PAGINATION DATA --- 
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const participationPerPage: number = 6;
+    const totalPages = Math.ceil((challenge?.participations?.length || 0) / participationPerPage);
+    const endIndex = participationPerPage * currentPage;
+    const startIndex = endIndex - participationPerPage;
+    const currentParticipations = challenge?.participations?.slice(startIndex, endIndex) || [];
 
     // --- SHOW PARTICIPATIONS IF EXISTING --- 
     useEffect(() => {
@@ -77,14 +86,14 @@ export default function ParticipationsByChallenge() {
 
                 {hasParticipation ? (
 
-                    challenge?.participations?.map((part) => (
+                    currentParticipations.map((part) => (
 
                         <div
                             key={part.id}
                             className="flex flex-col gap-2 "
                         >
                             <div
-                               
+
                                 className="border border-green-light rounded-lg overflow-hidden relative aspect-video w-full"
                             >
                                 <ReactPlayer
@@ -105,13 +114,7 @@ export default function ParticipationsByChallenge() {
                                 <p>Posté par : {part.player?.username}</p>
                             </div>
                         </div>
-
-
-
-
                     ))
-
-
                 ) : (
                     <div>
                         <p>Il n'y aucune participation actuellement à ce challenge.</p>
@@ -119,6 +122,13 @@ export default function ParticipationsByChallenge() {
                 )}
             </div>
 
+            {totalPages > 1 && (
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={(page) => setCurrentPage(page)}
+                />
+            )}
         </section>
 
     )
