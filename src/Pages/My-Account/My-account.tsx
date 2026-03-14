@@ -5,6 +5,7 @@ import Input from "../../ui/Input";
 import Button from "../../ui/Button";
 import SuccessMessage from "../../ui/SuccessMessage";
 import H1Title from "../../ui/H1Title";
+import { useAuth } from "../../hooks/useAuth"; // get userInfo from hook useAuth & AuthContext
 
 type User = {
 	id: number;
@@ -31,9 +32,10 @@ type MyAccountProps = {
 	userId: number;
 };
 
-export default function MyAccount({ userId }: MyAccountProps) {
+export default function MyAccount() {
 	const navigate = useNavigate();
 	const [user, setUser] = useState<User | null>(null);
+	const { userId, userInfo } = useAuth(); // logged user info
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState("");
 	const [form, setForm] = useState<UserForm>({
@@ -52,37 +54,60 @@ export default function MyAccount({ userId }: MyAccountProps) {
 
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-	// Fetch user data
 	useEffect(() => {
-		const fetchUser = async () => {
-			setLoading(true);
-			try {
-				const response = await fetch(
-					`${import.meta.env.VITE_API_URL}/users/${userId}`,
-				);
-				if (!response.ok) throw new Error(`HTTP error ${response.status}`);
-				const data: User = await response.json();
+		if (!userId || !userInfo) return;
 
-				setUser(data);
-				setForm({
-					username: data.username || "",
-					email: data.email || "",
-					favouriteGame: data.favouriteGame || "",
-					twitch: data.twitch || "",
-					youtube: data.youtube || "",
-					discord: data.discord || "",
-					avatar: null,
-				});
-			} catch (err) {
-				console.error("Error fetching user:", err);
-				setError("Impossible de récupérer les informations du compte.");
-			} finally {
-				setLoading(false);
-			}
-		};
+		// Simulation du user connecté
+		setUser({
+			id: userId,
+			username: userInfo.username,
+			email: userInfo.email || "test@mail.com",
+			avatar: userInfo.avatar,
+			favouriteGame: userInfo.favouriteGame,
+			twitch: userInfo.twitch,
+			youtube: userInfo.youtube,
+			discord: userInfo.discord,
+		});
+		setForm({
+			username: userInfo.username,
+			email: userInfo.email || "",
+			favouriteGame: userInfo.favouriteGame || "",
+			twitch: userInfo.twitch,
+			youtube: userInfo.youtube,
+			discord: userInfo.discord,
+			avatar: null,
+		});
+		setLoading(false);
 
-		fetchUser();
-	}, [userId]);
+		// Version fetch à activer plus tard avec /me
+		/*
+  const fetchUser = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/me`);
+      if (!response.ok) throw new Error(`HTTP error ${response.status}`);
+      const data: User = await response.json();
+      setUser(data);
+      setForm({
+        username: data.username || "",
+        email: data.email || "",
+        favouriteGame: data.favouriteGame || "",
+        twitch: data.twitch || "",
+        youtube: data.youtube || "",
+        discord: data.discord || "",
+        avatar: null,
+      });
+    } catch (error) {
+      console.error("Erreur fetch /me:", error);
+      setError("Impossible de récupérer les informations du compte.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchUser();
+  */
+	}, [userId, userInfo]);
 
 	// Handle input changes
 	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -110,7 +135,7 @@ export default function MyAccount({ userId }: MyAccountProps) {
 
 		try {
 			const response = await fetch(
-				`${import.meta.env.VITE_API_URL}/users/${userId}`,
+				`${import.meta.env.VITE_API_URL}/users/${userId}`, // à modifier en /me quand routes prêtes
 				{
 					method: "PATCH",
 					body: formData,
@@ -135,7 +160,7 @@ export default function MyAccount({ userId }: MyAccountProps) {
 		try {
 			setIsDeleting(true);
 			const response = await fetch(
-				`${import.meta.env.VITE_API_URL}/users/${userId}`,
+				`${import.meta.env.VITE_API_URL}/users/${userId}`, // à modifier en /me quand routes prêtes
 				{
 					method: "DELETE",
 				},
