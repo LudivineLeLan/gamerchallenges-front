@@ -23,12 +23,12 @@ export default function App() {
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/menu" element={<BurgerMenu />} />
           <Route path="/jeux" element={<Games />} />
           <Route path="/jeux/:id" element={<GameDetails />} />
           <Route path="/challenges" element={<Challenges />} />
-          <Route path="/mon-compte" element={<MyAccount userId={3} />} /> //
-          user id ne restera pas là, c'est en attendant d'avoir un système
-          d'auth
+          <Route path="/mon-compte" element={<MyAccount />} /> // user id ne
+          restera pas là, c'est en attendant d'avoir un système d'auth
           <Route path="/mes-challenges" element={<MyChallenges />} />
           <Route path="/classement" element={<Ranking />} />
           <Route path="/contact" element={<Contact />} />
