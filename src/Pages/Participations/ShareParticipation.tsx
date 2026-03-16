@@ -6,6 +6,7 @@ import Button from "../../ui/Button";
 import SuccessMessage from "../../ui/SuccessMessage";
 import ErrorSummary from "../../ui/ErrorSummary";
 import { validateParticipationForm } from "../../utils/validation";
+import { shareParticipation } from "../../Services/fetchService";
 
 export default function ShareParticipation() {
 
@@ -14,7 +15,7 @@ export default function ShareParticipation() {
     title: "",
     url: ""
   });
-  const [success, setSuccessMessage] = useState<string | null>(null);
+  const [success, setSuccessMessage] = useState<string>("");
   const [errors, setErrors] = useState<FormErrors<ParticipationInputs>>({});
 
 
@@ -55,8 +56,8 @@ export default function ShareParticipation() {
 
     // --- FETCH DATA TO BACKEND ---
     try {
-      
-      const data = await sendContactMessage(formData);
+
+      const data = await shareParticipation(formData);
 
       // Show success message
       setSuccessMessage(data.message);
@@ -69,13 +70,9 @@ export default function ShareParticipation() {
 
       // Empty form after form submit
       setFormData({
-        name: "",
-        email: "",
-        message: "",
+        title: "",
+        url: "",
       });
-
-      // Put isChecked to its initial state
-      setIsChecked(false);
 
       // create error if connection to server is broken
     } catch (error) {
@@ -91,7 +88,7 @@ export default function ShareParticipation() {
   };
 
   return (
-    <section className="flex flex-col py-2 gap-2 items-center justify-center mx-auto min-h-screen w-full">
+    <section className="flex flex-col py-2 gap-2 items-center justify-center mx-auto h-full w-full">
       <form
         className="
                         flex flex-col gap-6 text-p-mobile bg-green-dark text-white p-4 my-2 rounded-2xl border-green-light border-2 border-green-light
@@ -105,7 +102,7 @@ export default function ShareParticipation() {
                         md:text-h1-tablet
                         lg:text-h1-desktop
                     ">
-          Contactez-nous
+          Partagez votre vidéo
         </h1>
         <fieldset
           className="w-full
@@ -124,8 +121,8 @@ export default function ShareParticipation() {
             {/* Url input */}
 
             <Input
-              type="email"
-              placeholder="mail@mail.com"
+              type="url"
+              placeholder="https://votre-lien.com"
               value={formData.url}
               onChange={handleChange}
               name="url"

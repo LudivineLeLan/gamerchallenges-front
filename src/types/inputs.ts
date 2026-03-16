@@ -1,6 +1,6 @@
 
 export type InputProps = {
-    type?: "text" | "email" | "checkbox" | "password";
+    type?: "text" | "email" | "checkbox" | "password" | "url";
     isTextArea?: boolean;
     placeholder?: string;
     onChange : (e : React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
