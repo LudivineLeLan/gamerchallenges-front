@@ -8,6 +8,8 @@ import H1Title from "../../ui/H1Title";
 import Button from "../../ui/Button";
 import Pagination from "../../ui/Pagination";
 import AvatarProfile from "../../assets/images/dofuscover.jpg"; // local image, waiting for multer to be implemented on the backend → avatars
+import type { Game, User, Challenge, Participation } from "../../types/models";
+
 
 export default function MyChallenges() {
   const userId = 1; // we'll have to handle the authentication to get the real current id of the user
