@@ -5,6 +5,7 @@ import Input from "../../ui/Input";
 import Button from "../../ui/Button";
 import SuccessMessage from "../../ui/SuccessMessage";
 import ErrorSummary from "../../ui/ErrorSummary";
+import { validateParticipationForm } from "../../utils/validation";
 
 export default function ShareParticipation() {
 
@@ -43,7 +44,7 @@ export default function ShareParticipation() {
     setErrors({});
 
     // Check if data are valid
-    const result = validateContactForm(formData, isChecked);
+    const result = validateParticipationForm(formData);
 
     // Update the state of error only if there is an error
     // Stop the code
@@ -54,6 +55,7 @@ export default function ShareParticipation() {
 
     // --- FETCH DATA TO BACKEND ---
     try {
+      
       const data = await sendContactMessage(formData);
 
       // Show success message
