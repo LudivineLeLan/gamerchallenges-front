@@ -8,6 +8,7 @@ import Button from "../../ui/Button";
 import ReactPlayer from 'react-player'
 import H2 from "../../ui/H2";
 
+
 type ApiResponse = Challenge & { error?: string };
 
 export default function ChallengeDetails() {
