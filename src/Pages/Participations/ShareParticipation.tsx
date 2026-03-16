@@ -3,6 +3,8 @@ import type { ParticipationInputs, FormErrors } from "../../types/forms"
 import { useNavigate } from "react-router-dom";
 import Input from "../../ui/Input";
 import Button from "../../ui/Button";
+import SuccessMessage from "../../ui/SuccessMessage";
+import ErrorSummary from "../../ui/ErrorSummary";
 
 export default function ShareParticipation() {
 
@@ -11,8 +13,8 @@ export default function ShareParticipation() {
         title: "",
         url:""
     });
-    const[successMessage, setSuccessMessage] = useState<string | null>(null);
-    const[errorMessage, setErrorMessage] = useState<FormErrors<ParticipationInputs>>({});
+    const[success, setSuccessMessage] = useState<string | null>(null);
+    const[errors, setErrorMessage] = useState<FormErrors<ParticipationInputs>>({});
 
 
     // --- NAVIGATION --- 
@@ -20,7 +22,7 @@ export default function ShareParticipation() {
 
 
     // Update value put in the form
-    const handleChange = (e : React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e : React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 
         // Get name and value from event 
         const { name, value } = e.target;
@@ -54,16 +56,16 @@ export default function ShareParticipation() {
                             lg:max-w-[80%] lg:mx-auto
                         ">
               <div className="flex flex-col gap-4 w-full">
-                {/* Name input */}
+                {/* Title input */}
                 <Input
                   type="text"
-                  placeholder="Nom"
+                  placeholder="Titre de la vidéo"
                   value={formData.title}
                   onChange={handleChange}
                   name="title"
                 />
     
-                {/* Mail input */}
+                {/* Url input */}
     
                 <Input
                   type="email"
