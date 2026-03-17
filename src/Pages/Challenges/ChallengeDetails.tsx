@@ -29,7 +29,7 @@ export default function ChallengeDetails() {
 	const navigate = useNavigate();
 
 	// ---- USER DATA ----
-	const { userInfo } = useAuth();
+	const { userInfo, token } = useAuth();
 
 	// ---- SHOW THE CHALLENGE SELECTED ----
 	useEffect(() => {
@@ -61,7 +61,7 @@ export default function ChallengeDetails() {
 				data.created_at = formattedDate;
 
 				// Set challenge data in state
-				setChallenge(data); // ✅ English: Store fetched challenge in state
+				setChallenge(data); // Store fetched challenge in state
 			} catch (error) {
 				if (error instanceof Error) {
 					setErrors(error.message);
@@ -77,7 +77,7 @@ export default function ChallengeDetails() {
 	//Check vote for each participation
 	useEffect(() => {
 		const checkVotes = async () => {
-			if (!userInfo || !challenge?.participations) return;
+			if (!userInfo?.token || !challenge?.participations) return;
 
 			const API_URL = import.meta.env.VITE_API_URL;
 
@@ -86,10 +86,10 @@ export default function ChallengeDetails() {
 
 				for (const participation of challenge.participations) {
 					const response = await fetch(
-						`${API_URL}/participations/${participation.id}/check-vote`,
+						`${API_URL}/participations/${participation.id}/vote`,
 						{
 							headers: {
-								Authorization: `Bearer ${userInfo}`,
+								Authorization: `Bearer ${token}`,
 							},
 						},
 					);
@@ -129,7 +129,7 @@ export default function ChallengeDetails() {
 				{
 					method,
 					headers: {
-						Authorization: `Bearer ${userInfo.token}`,
+						Authorization: `Bearer ${token}`,
 					},
 				},
 			);
@@ -137,13 +137,13 @@ export default function ChallengeDetails() {
 			const data = await response.json();
 			if (!response.ok) throw new Error(data.message);
 
-			// Met à jour le vote local
+			// Update local vote
 			setVotes((prev) => ({
 				...prev,
 				[participationId]: !hasVoted, // toggle vote
 			}));
 
-			// Met à jour le compteur de votes local
+			// Update total amount of votes
 			setChallenge((prev) => {
 				if (!prev) return prev;
 
@@ -155,8 +155,8 @@ export default function ChallengeDetails() {
 						return {
 							...participation,
 							voteCounted: hasVoted
-								? participation.voteCounted - 1 // retirer vote
-								: participation.voteCounted + 1, // ajouter vote
+								? participation.voteCounted - 1 // remove vote
+								: participation.voteCounted + 1, // add vote
 						};
 					}),
 				};
@@ -168,7 +168,6 @@ export default function ChallengeDetails() {
 		}
 	};
 
-	// Render loading
 	if (!challenge) {
 		return <p>Chargement en cours</p>;
 	}
