@@ -51,13 +51,11 @@ const Games = () => {
 				{games.map((game) => (
 					<Link
 						key={game.id}
-						to={`/games/${game.id}`}
+						to={`/jeux/${game.id}`}
 						className="flex flex-col items-center"
 					>
 						<Image src={game.cover} alt={game.title} />
-						<H2
-							label={game.title}
-						/>
+						<H2 label={game.title} />
 					</Link>
 				))}
 			</div>
