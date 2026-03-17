@@ -9,6 +9,7 @@ import ReactPlayer from 'react-player'
 import H2 from "../../ui/H2";
 import { useAuth } from "../../hooks/useAuth";
 
+
 type ApiResponse = Challenge & { error?: string };
 
 export default function ChallengeDetails() {
