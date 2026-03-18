@@ -1,50 +1,64 @@
 import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import type { Challenge } from "../../types/models";
-import { Link, useParams, useNavigate } from "react-router-dom";
-import Image from "../../ui/Image";
 import H1Title from "../../ui/H1Title";
-import { FaHeart } from "react-icons/fa";
 import ReactPlayer from "react-player";
+import Pagination from "../../ui/Pagination";
+import { FaHeart } from "react-icons/fa";
 import { useAuth } from "../../hooks/useAuth";
 import ErrorSummary from "../../ui/ErrorSummary";
 
 type ApiResponse = Challenge & { error?: string };
 
-export default function ChallengeDetails() {
+export default function ParticipationsByChallenge() {
 	const { id } = useParams();
 	const navigate = useNavigate();
 	const { userInfo, token, loadingUser } = useAuth();
 
 	const [challenge, setChallenge] = useState<Challenge | null>(null);
-	const [voteErrors, setVoteErrors] = useState<{ [key: number]: string }>({});
+	const [error, setError] = useState<string | null>(null);
 	const [votes, setVotes] = useState<{ [key: number]: boolean }>({});
 	const [loadingVote, setLoadingVote] = useState<{ [key: number]: boolean }>(
 		{},
 	);
+	const [voteErrors, setVoteErrors] = useState<{ [key: number]: string }>({});
+
+	const [currentPage, setCurrentPage] = useState(1);
+	const participationPerPage = 6;
+
+	const totalPages = Math.ceil(
+		(challenge?.participations?.length || 0) / participationPerPage,
+	);
+	const startIndex = (currentPage - 1) * participationPerPage;
+	const currentParticipations =
+		challenge?.participations?.slice(
+			startIndex,
+			startIndex + participationPerPage,
+		) || [];
 
 	useEffect(() => {
-		const fetchChallenge = async () => {
+		const fetchParticipations = async () => {
 			const API_URL = import.meta.env.VITE_API_URL;
 			setChallenge(null);
+			setError(null);
 
 			try {
-				const res = await fetch(`${API_URL}/challenges/${id}`);
+				const res = await fetch(`${API_URL}/challenges/${id}/participations`);
 				const data: ApiResponse = await res.json();
-
 				if (!res.ok)
-					throw new Error(data.error || "Impossible d'afficher ce challenge.");
-
-				data.created_at = new Intl.DateTimeFormat("fr-FR")
-					.format(new Date(data.created_at))
-					.replaceAll("/", ".");
+					throw new Error(
+						data.error || "Impossible d'afficher les participations.",
+					);
 
 				setChallenge(data);
 			} catch (err: any) {
-				console.error(err);
+				if (err instanceof Error) setError(err.message);
+				else
+					setError("Le serveur ne répond pas. Veuillez réessayer plus tard.");
 			}
 		};
 
-		if (id) fetchChallenge();
+		if (id) fetchParticipations();
 	}, [id]);
 
 	useEffect(() => {
@@ -141,46 +155,36 @@ export default function ChallengeDetails() {
 		}
 	};
 
-	if (!challenge)
+	const hasParticipation = (challenge?.participations?.length ?? 0) > 0;
+
+	if (!challenge && !error)
 		return (
 			<p className="text-white animate-pulse text-center mt-10">
-				Chargement...
+				Chargement en cours...
 			</p>
 		);
 
 	return (
-		<section className="p-2 lg:p-8">
-			<article className="flex flex-col gap-6 border-3 border-green-light rounded-xl items-center p-4 md:max-w-[600px] md:mx-auto lg:max-w-[1000px] lg:border-4 lg:rounded-3xl lg:w-[75%]">
-				<div className="flex flex-col gap-3 items-center">
-					<Image src={challenge.game?.cover || ""} alt={challenge.name} />
-					<H1Title size="h1-mobile">
-						{challenge.name}{" "}
-						<span className="text-sm font-normal md:text-p-tablet lg:text">
-							{challenge.created_at}
-						</span>
-					</H1Title>
-				</div>
+		<section className="p-2">
+			{error && <ErrorSummary errors={{ server: error }} />}
+			<H1Title size="h1-mobile">
+				Participations au challenge : {challenge?.name}
+			</H1Title>
 
-				<p className="text-p-mobile md:text-p-tablet">
-					{challenge.description}
-				</p>
-
-				<Link
-					to={userInfo ? "/participations/partage" : "/auth"}
-					className="text-sm bg-green-medium py-2 px-6 rounded-full uppercase font-bold w-auto mx-auto border-2 border-green-medium hover:bg-white hover:text-green-light hover:border-green-light md:text-base"
-				>
-					{userInfo
-						? "Partager une vidéo"
-						: "Se connecter pour partager une vidéo"}
-				</Link>
-
-				<div className="flex flex-col gap-6 items-center w-[90%] max-w-[370px] mx-auto md:w-[70%] lg:max-w-[800px]">
-					{challenge.participations?.slice(0, 4).map((p) => (
-						<div key={p.id} className="w-full">
-							<div className="border border-green-light rounded-lg aspect-video">
-								<ReactPlayer src={p.url} controls width="100%" height="100%" />
+			<div className="grid grid-cols-1 gap-6 w-[90%] max-w-[370px] mx-auto md:grid-cols-2 md:max-w-[600px] md:gap-12 lg:grid-cols-3 lg:max-w-[1200px]">
+				{hasParticipation ? (
+					currentParticipations.map((p) => (
+						<div key={p.id} className="flex flex-col gap-2">
+							<div className="border border-green-light rounded-lg overflow-hidden relative aspect-video w-full">
+								<ReactPlayer
+									src={p.url}
+									controls
+									width="100%"
+									height="100%"
+									className="absolute top-0 left-0"
+								/>
 							</div>
-							<div className="flex flex-col items-center mt-2">
+							<div className="flex flex-col items-center text-p-mobile md:text-p-tablet text-white mt-1">
 								<div className="flex items-center gap-2">
 									<span>{p.voteCounted || 0}</span>
 									{loadingUser ? (
@@ -202,15 +206,21 @@ export default function ChallengeDetails() {
 								)}
 							</div>
 						</div>
-					))}
-					<Link
-						to={`/challenges/${challenge.id}/participations`}
-						className="text-sm bg-green-medium py-2 px-6 rounded-full uppercase font-bold w-auto mx-auto border-2 border-green-medium hover:bg-white hover:text-green-light hover:border-green-light md:text-base"
-					>
-						Voir plus
-					</Link>
-				</div>
-			</article>
+					))
+				) : (
+					<div className="col-span-full flex justify-center text-white mt-4 opacity-50">
+						<p>Il n'y a aucune participation actuellement à ce challenge.</p>
+					</div>
+				)}
+			</div>
+
+			{totalPages > 1 && (
+				<Pagination
+					currentPage={currentPage}
+					totalPages={totalPages}
+					onPageChange={(page) => setCurrentPage(page)}
+				/>
+			)}
 		</section>
 	);
 }
