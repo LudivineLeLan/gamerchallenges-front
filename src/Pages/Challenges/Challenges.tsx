@@ -5,10 +5,12 @@ import H1Title from "../../ui/H1Title";
 import Pagination from "../../ui/Pagination";
 import ErrorSummary from "../../ui/ErrorSummary";
 import type { ApiErrorResponse } from "../../types/forms";
+import Image from "../../ui/Image";
 
 export default function Challenges() {
   const [challenges, setChallenges] = useState<Challenge[]>([]);
-  const [error, setError] = useState<ApiErrorResponse>({}); 
+  // Ajout de Partial<> pour éviter les erreurs TypeScript avec un objet vide
+  const [error, setError] = useState<Partial<ApiErrorResponse>>({}); 
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 8;
 
@@ -31,7 +33,7 @@ export default function Challenges() {
       })
       .then((data) => setChallenges(data))
       .catch((err) => {
-        console.error("Erreur fetch challenges :", err);
+        console.error("Fetch challenges error:", err);
         setError({
           server: err.error || "Impossible de charger les challenges.",
           statusCode: err.status || 500
@@ -51,15 +53,16 @@ export default function Challenges() {
       <H1Title>Tous les challenges</H1Title>
 
       <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-10 justify-items-center">
-        {/* On vérifie que challenges est bien un tableau avant de mapper */}
+        {/* Verify that challenges is an array before mapping */}
         {Array.isArray(currentChallenges) && currentChallenges.map((challenge) => (
-          <article key={challenge.id} className="flex flex-col items-center">
-            <img
+          <article 
+            key={challenge.id} 
+            className="flex flex-col items-center cursor-pointer transition-transform duration-300 ease-out hover:scale-105"
+            onClick={() => handleChallengeClick(challenge.id)}
+          >
+            <Image
               src={challenge.game.cover}
               alt={challenge.game.title}
-              onClick={() => handleChallengeClick(challenge.id)}
-              className="w-45 h-40 rounded-lg border-4 border-green-light object-cover cursor-pointer
-              transition-transform duration-300 ease-out hover:scale-105 hover:shadow-xl"
             />
             <p className="text-white font-medium text-center mt-3">
               {challenge.name}
