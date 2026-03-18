@@ -66,7 +66,7 @@ const Games = () => {
 				<p className="text-center text-white mt-10 opacity-50">Aucun jeu à afficher pour le moment.</p>
 			) : (
 				<>
-					<div className="grid grid-cols-2 items-start sm:grid-cols-3 gap-5">
+					<div className="grid grid-cols-2 items-start sm:grid-cols-3 gap-5 lg:gap-12">
 						{games.map((game) => (
 							<Link
 								key={game.id}
