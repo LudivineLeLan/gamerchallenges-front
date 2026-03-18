@@ -7,139 +7,145 @@ import Pagination from "../../ui/Pagination";
 import { FaHeart } from "react-icons/fa";
 import { useAuth } from "../../hooks/useAuth";
 
+// Nouveaux imports pour la gestion des erreurs
+import type { ApiErrorResponse } from "../../types/forms";
+import ErrorSummary from "../../ui/ErrorSummary";
+
 type ApiResponse = Challenge & { error?: string };
 
 export default function ParticipationsByChallenge() {
-	// --- Get id from params ---
-	const { id } = useParams();
-	const { userInfo, token, loadingUser } = useAuth();
+    // --- Get id from params ---
+    const { id } = useParams();
+    const { userInfo, token, loadingUser } = useAuth();
 
-	// --- STATES INITIALIZATION ---
-	const [challenge, setChallenge] = useState<Challenge | null>(null);
-	const [error, setError] = useState<string | null>(null);
+    // --- STATES INITIALIZATION ---
+    const [challenge, setChallenge] = useState<Challenge | null>(null);
+    const [error, setError] = useState<Partial<ApiErrorResponse>>({});
 
-	// --- PAGINATION DATA ---
-	const [currentPage, setCurrentPage] = useState<number>(1);
-	const participationPerPage: number = 6;
-	const totalPages = Math.ceil(
-		(challenge?.participations?.length || 0) / participationPerPage,
-	);
-	const endIndex = participationPerPage * currentPage;
-	const startIndex = endIndex - participationPerPage;
-	const currentParticipations =
-		challenge?.participations?.slice(startIndex, endIndex) || [];
+    // --- PAGINATION DATA ---
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const participationPerPage: number = 6;
+    const totalPages = Math.ceil(
+        (challenge?.participations?.length || 0) / participationPerPage,
+    );
+    const endIndex = participationPerPage * currentPage;
+    const startIndex = endIndex - participationPerPage;
+    const currentParticipations =
+        challenge?.participations?.slice(startIndex, endIndex) || [];
 
-	// --- SHOW PARTICIPATIONS IF EXISTING ---
-	useEffect(() => {
-		const fetchParticipations = async () => {
-			const API_URL = import.meta.env.VITE_API_URL;
-			setChallenge(null);
-			setError(null);
+    // --- SHOW PARTICIPATIONS IF EXISTING ---
+    useEffect(() => {
+        const fetchParticipations = async () => {
 
-			try {
-				const response = await fetch(
-					`${API_URL}/challenges/${id}/participations`,
-				);
-				const data: ApiResponse = await response.json();
-				console.log("Données reçues:", data);
+            const API_URL = import.meta.env.VITE_API_URL;
 
-				// Check the server answer
-				if (!response.ok) {
-					throw new Error(
-						data.error || "Impossible d'afficher les participations.",
-					);
-				}
+            setChallenge(null);
+            setError({});
 
-				setChallenge(data);
-			} catch (error) {
-				if (error instanceof Error) {
-					setError(error.message);
-				} else {
-					setError("Le serveur ne répond pas. Veuillez réessayer plus tard.");
-				}
-			}
-		};
+            try {
+                const response = await fetch(
+                    `${API_URL}/challenges/${id}/participations`,
+                );
+                const data: ApiResponse = await response.json();
+                console.log("Données reçues:", data);
 
-		if (id) fetchParticipations();
-	}, [id]);
+                // 3. Throw data si la requête échoue
+                if (!response.ok) {
+                    throw data;
+                }
 
-	// --- Handler vote à implémenter plus tard ---
-	const handleVote = async (participationId: number) => {
-		// TODO: envoyer un POST à /participations/:id/vote avec token
-		console.log("Vote clicked for participation:", participationId);
-	};
+                setChallenge(data);
+            } catch (err: any) {
+                
+                console.error("Erreur reçue:", err);
+                setError({
+                    server: err.error || "Impossible d'afficher les participations.",
+                    statusCode: err.status || 500
+                });
+            }
+        };
 
-	// Checking that the challenge has participations
-	const hasParticipation = (challenge?.participations?.length ?? 0) > 0;
+        if (id) fetchParticipations();
+    }, [id]);
 
-	return (
-		<section className="p-2">
-			<H1Title size={"h1-mobile"}>
-				Participations au challenge : {challenge?.name}
-			</H1Title>
+    // --- Handler vote à implémenter plus tard ---
+    const handleVote = async (participationId: number) => {
+        // TODO: envoyer un POST à /participations/:id/vote avec token
+        console.log("Vote clicked for participation:", participationId);
+    };
 
-			<div
-				className="grid grid-cols-1 gap-6 w-[90%] max-w-[370px] mx-auto
-                      md:grid-cols-2 md:max-w-[600px] md:gap-12
-                      lg:grid-cols-3 lg:max-w-[1200px]"
-			>
-				{hasParticipation ? (
-					currentParticipations.map((part) => (
-						<div key={part.id} className="flex flex-col gap-2">
-							<div className="border border-green-light rounded-lg overflow-hidden relative aspect-video w-full">
-								<ReactPlayer
-									src={part.url}
-									controls={true}
-									width="100%"
-									height="100%"
-									className="absolute top-0 left-0"
-								/>
-							</div>
-							<div className="flex flex-col items-center text-p-mobile md:text-p-tablet">
-								<p>{part.title}</p>
-								<p>Posté par : {part.player?.username}</p>
+    // Checking that the challenge has participations
+    const hasParticipation = (challenge?.participations?.length ?? 0) > 0;
 
-								{/* --- Bouton vote avec nombre de votes --- */}
-								<div className="flex items-center gap-2 mt-1">
-									<span>{part.voteCount || 0}</span>
+    // LOADING
+    if (!challenge && !error.server) {
+        return (
+            <div className="flex justify-center mt-10">
+                <p className="text-white animate-pulse">Chargement en cours...</p>
+            </div>
+        );
+    }
 
-									{/* --- Rendu conditionnel pour futur usage --- */}
-									{/*
-                  {loadingUser ? (
-                    <FaHeart className="text-gray-400 animate-pulse" />
-                  ) : userInfo ? (
-                    <FaHeart
-                      className="cursor-pointer text-white text-[18px]"
-                      onClick={() => handleVote(part.id)}
-                    />
-                  ) : (
-                    <FaHeart className="text-gray-400" title="Connectez-vous pour voter" />
-                  )}
-                  */}
+    return (
+        <section className="p-2">
+            
+            <ErrorSummary errors={error} />
 
-									{/* Version visible pour l'instant */}
-									<FaHeart
-										className="cursor-pointer text-white text-[18px]"
-										onClick={() => handleVote(part.id)}
-									/>
-								</div>
-							</div>
-						</div>
-					))
-				) : (
-					<div>
-						<p>Il n'y aucune participation actuellement à ce challenge.</p>
-					</div>
-				)}
-			</div>
+            {challenge && (
+                <>
+                    <H1Title>
+                        Participations au challenge : {challenge.name}
+                    </H1Title>
 
-			{totalPages > 1 && (
-				<Pagination
-					currentPage={currentPage}
-					totalPages={totalPages}
-					onPageChange={(page) => setCurrentPage(page)}
-				/>
-			)}
-		</section>
-	);
+                    <div
+                        className="grid grid-cols-1 gap-6 w-[90%] max-w-[370px] mx-auto
+                              md:grid-cols-2 md:max-w-[600px] md:gap-12
+                              lg:grid-cols-3 lg:max-w-[1200px]"
+                    >
+                        {hasParticipation ? (
+                            currentParticipations.map((part) => (
+                                <div key={part.id} className="flex flex-col gap-2">
+                                    <div className="border border-green-light rounded-lg overflow-hidden relative aspect-video w-full">
+                                        <ReactPlayer
+                                            src={part.url}
+                                            controls={true}
+                                            width="100%"
+                                            height="100%"
+                                            className="absolute top-0 left-0"
+                                        />
+                                    </div>
+                                    <div className="flex flex-col items-center text-p-mobile md:text-p-tablet text-white">
+                                        <p>{part.title}</p>
+                                        <p>Posté par : {part.player?.username}</p>
+
+                                        {/* --- Bouton vote avec nombre de votes --- */}
+                                        <div className="flex items-center gap-2 mt-1">
+                                            <span>{part.voteCount || 0}</span>
+                                            <FaHeart
+                                                className="cursor-pointer text-white text-[18px]"
+                                                onClick={() => handleVote(part.id)}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <div className="col-span-full flex justify-center text-white mt-4 opacity-50">
+                                <p>Il n'y a aucune participation actuellement à ce challenge.</p>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Pagination protégée par la condition du challenge */}
+                    {totalPages > 1 && (
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            onPageChange={(page) => setCurrentPage(page)}
+                        />
+                    )}
+                </>
+            )}
+        </section>
+    );
 }
