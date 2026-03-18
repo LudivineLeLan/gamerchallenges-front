@@ -4,7 +4,7 @@ import Image from "../../ui/Image";
 import { FaHeart } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Button from "../../ui/Button";
-import { ApiErrorResponse } from "../../types/forms";
+import type { ApiErrorResponse } from "../../types/forms";
 import ErrorSummary from "../../ui/ErrorSummary";
 
 type Game = {
