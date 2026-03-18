@@ -11,8 +11,8 @@ function MenuBurger() {
 	const location = useLocation();
 	const navigate = useNavigate();
 
-	const closeMenu = () => setIsOpen(false);
-	const toggleMenu = () => setIsOpen((prev) => !prev);
+  const closeMenu = () => setIsOpen(false);
+  const toggleMenu = () => setIsOpen((prev) => !prev);
 
 	const handleLogout = () => {
 		logout();
@@ -38,9 +38,9 @@ function MenuBurger() {
           rounded-lg
           transition
         "
-			>
-				<Icon icon="mdi:menu" className="text-white w-5 h-5 md:w-7 md:h-7" />
-			</button>
+      >
+        <Icon icon="mdi:menu" className="text-white w-5 h-5 md:w-7 md:h-7" />
+      </button>
 
 			{/* Overlay */}
 			{isOpen && (
