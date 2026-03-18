@@ -3,6 +3,9 @@ import { useLocation, Link } from "react-router-dom";
 import Button from "../../ui/Button";
 import Image from "../../ui/Image";
 import H2 from "../../ui/H2";
+import type { ApiErrorResponse } from "../../types/forms";
+import ErrorSummary from "../../ui/ErrorSummary";
+import type { Game, Challenge, User } from "../../types/models";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -13,29 +16,32 @@ function SearchPage() {
 	const query = params.get("q")?.toLowerCase() || "";
 	const category = params.get("category") || "Tous";
 
-	const [games, setGames] = useState([]);
-	const [challenges, setChallenges] = useState([]);
-	const [users, setUsers] = useState([]);
+	const [games, setGames] = useState<Game[]>([]);
+    const [challenges, setChallenges] = useState<Challenge[]>([]);
+    const [users, setUsers] = useState<User[]>([]);
 
 	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState(null);
+	const [error, setError] = useState<Partial<ApiErrorResponse>>({});
 
 	useEffect(() => {
 		const fetchResults = async () => {
 			setLoading(true);
-			setError(null);
+			setError({});
 			setGames([]);
 			setChallenges([]);
 			setUsers([]);
 			setLoading(true);
-			setError(null);
+			setError({});
 
 			try {
 				/* GAMES */
 				if (category === "Jeux" || category === "Tous") {
 					const res = await fetch(`${API_URL}/games`);
 					const data = await res.json();
-					const filteredGames = data.games.filter((game) =>
+
+					if (!res.ok) throw data;
+
+					const filteredGames = data.games.filter((game : Game) =>
 						game.title.toLowerCase().includes(query),
 					);
 					setGames(filteredGames);
@@ -45,27 +51,34 @@ function SearchPage() {
 				if (category === "Challenges" || category === "Tous") {
 					const res = await fetch(`${API_URL}/challenges`);
 					const data = await res.json();
-					const filteredChallenges = data.filter((challenge) =>
+
+					if (!res.ok) throw data;
+
+					const filteredChallenges = data.filter((challenge : Challenge) =>
 						challenge.name.toLowerCase().includes(query),
 					);
 					setChallenges(filteredChallenges);
 				}
 
-				/* USERS */
+				/* USERS */ 
 				if (category === "Joueurs" || category === "Tous") {
 					const res = await fetch(`${API_URL}/users`);
 					const data = await res.json();
+
+					if (!res.ok) throw data;
+
 					console.log(data);
-					const filteredUsers = data.filter((user) =>
+					const filteredUsers = data.filter((user : User) =>
 						user.username.toLowerCase().includes(query),
 					);
 					setUsers(filteredUsers);
 				}
-			} catch (err) {
+			} catch (err : any) {
 				console.error(err);
-				setError(
-					"Une erreur est survenue lors de la récupération des données.",
-				);
+				setError({
+                    statusCode: err.status || 500,
+                    server: err.error || "Une erreur est survenue lors de la récupération des données."
+                });
 			} finally {
 				setLoading(false);
 			}
@@ -82,8 +95,15 @@ function SearchPage() {
 				Recherche : {totalResults} résultat{totalResults > 1 ? "s" : ""}
 			</h1>
 
-			{loading && <p>Chargement...</p>}
-			{error && <p className="text-red-500">{error}</p>}
+			<div className="w-full max-w-6xl mb-4">
+                <ErrorSummary errors={error} />
+            </div>
+
+			{loading && !error.server && (
+                <div className="flex justify-center my-4">
+                    <p className="text-white animate-pulse">Chargement en cours...</p>
+                </div>
+            )}
 
 			{/* GAMES */}
 			{(category === "Jeux" || category === "Tous") && (
@@ -118,7 +138,7 @@ function SearchPage() {
 								to={`/challenges/${challenge.id}`}
 								className="flex flex-col items-center gap-2 p-4 rounded-lg w-full"
 							>
-								<Image src={challenge.game.cover} alt={challenge.name} />
+								<Image src={challenge.game?.cover || ""} alt={challenge.name} />
 								<div className="w-full truncate text-center">
 									<H2>{challenge.name}</H2>
 								</div>
@@ -140,7 +160,7 @@ function SearchPage() {
 								to={`/users/${user.id}`}
 								className="flex flex-col items-center gap-2 p-4 rounded-lg w-full"
 							>
-								<Image src={user.avatar} alt={user.username} />
+								<Image src={user.avatar || ""} alt={user.username} />
 								<div className="w-full truncate text-center">
 									<H2>{user.username}</H2>
 								</div>

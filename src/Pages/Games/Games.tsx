@@ -9,9 +9,9 @@ import ErrorSummary from "../../ui/ErrorSummary";
 
 
 type Game = {
-	id: number;
-	title: string;
-	cover: string;
+  id: number;
+  title: string;
+  cover: string;
 };
 
 const Games = () => {
@@ -20,7 +20,7 @@ const Games = () => {
 	const [page, setPage] = useState(1);
 	const [totalPages, setTotalPages] = useState(1);
 
-	const API_URL = import.meta.env.VITE_API_URL;
+  const API_URL = import.meta.env.VITE_API_URL;
 
 	const fetchGames = async (pageNumber: number = 1) => {
 
@@ -50,9 +50,9 @@ const Games = () => {
 		}
 	};
 
-	useEffect(() => {
-		fetchGames(page);
-	}, [page]);
+  useEffect(() => {
+    fetchGames(page);
+  }, [page]);
 
 	return (
 		<div className="px-4 sm:px-6 lg:px-8">

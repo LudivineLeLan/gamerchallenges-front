@@ -8,20 +8,20 @@ import type { ApiErrorResponse } from "../../types/forms";
 import ErrorSummary from "../../ui/ErrorSummary";
 
 type Game = {
-	id: number;
-	title: string;
-	genre: string;
-	release_year: string;
-	cover: string;
-	description: string;
-	challenges: Challenge[];
+  id: number;
+  title: string;
+  genre: string;
+  release_year: string;
+  cover: string;
+  description: string;
+  challenges: Challenge[];
 };
 
 type Challenge = {
-	id: number;
-	name: string;
-	description: string;
-	votes: number;
+  id: number;
+  name: string;
+  description: string;
+  votes: number;
 };
 
 const GameDetails = () => {
