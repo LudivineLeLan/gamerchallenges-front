@@ -238,7 +238,12 @@ export default function ChallengeDetails() {
 						{challenge.participations
 							?.slice(0, 4)
 							.map((participation, index) => (
-								<div key={participation.id} className="w-full">
+								<div key={participation.id} 
+									className={`w-full 
+                                            ${index === 1 ? "hidden md:block" : ""} 
+                                            ${index === 2 ? "hidden lg:block" : ""} 
+                                            ${index === 3 ? "hidden lg:block" : ""}
+                                        `}>
 									{/* ReactPlayer component used to show video from youtube */}
 									<div
 										className={`border border-green-light rounded-lg
