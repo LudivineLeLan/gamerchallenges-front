@@ -41,6 +41,7 @@ export type Participation = {
   player?: User;
   challenge?: Challenge;
   voters?: User[];
+  voteCounted?: number;
 };
 
 // User type

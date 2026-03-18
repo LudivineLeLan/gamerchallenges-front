@@ -7,10 +7,7 @@ import Pagination from "../../ui/Pagination";
 import { FaHeart } from "react-icons/fa";
 import { useAuth } from "../../hooks/useAuth";
 import ErrorSummary from "../../ui/ErrorSummary";
-
-// Nouveaux imports pour la gestion des erreurs
 import type { ApiErrorResponse } from "../../types/forms";
-import ErrorSummary from "../../ui/ErrorSummary";
 
 type ApiResponse = Challenge & { error?: string };
 
@@ -19,12 +16,11 @@ export default function ParticipationsByChallenge() {
 	const navigate = useNavigate();
 	const { userInfo, token, loadingUser } = useAuth();
 
+	// CORRECTION 1 : null au lieu de {}
 	const [challenge, setChallenge] = useState<Challenge | null>(null);
-	const [error, setError] = useState<string | null>(null);
+	const [error, setError] = useState<Partial<ApiErrorResponse>>({});
 	const [votes, setVotes] = useState<{ [key: number]: boolean }>({});
-	const [loadingVote, setLoadingVote] = useState<{ [key: number]: boolean }>(
-		{},
-	);
+	const [loadingVote, setLoadingVote] = useState<{ [key: number]: boolean }>({});
 	const [voteErrors, setVoteErrors] = useState<{ [key: number]: string }>({});
 
 	const [currentPage, setCurrentPage] = useState(1);
@@ -44,21 +40,23 @@ export default function ParticipationsByChallenge() {
 		const fetchParticipations = async () => {
 			const API_URL = import.meta.env.VITE_API_URL;
 			setChallenge(null);
-			setError(null);
+			setError({});
 
 			try {
 				const res = await fetch(`${API_URL}/challenges/${id}/participations`);
 				const data: ApiResponse = await res.json();
-				if (!res.ok)
-					throw new Error(
-						data.error || "Impossible d'afficher les participations.",
-					);
+
+				if (!res.ok) {
+					throw data; // On jette directement l'objet pour récupérer le status
+				}
 
 				setChallenge(data);
+
 			} catch (err: any) {
-				if (err instanceof Error) setError(err.message);
-				else
-					setError("Le serveur ne répond pas. Veuillez réessayer plus tard.");
+				setError({
+					statusCode: err.status || 500,
+					server: err.error || "Une erreur est survenue lors de la récupération des données."
+				});
 			}
 		};
 
@@ -160,8 +158,8 @@ export default function ParticipationsByChallenge() {
 	};
 
 	const hasParticipation = (challenge?.participations?.length ?? 0) > 0;
-
-	if (!challenge && !error)
+	
+	if (!challenge && !error.server)
 		return (
 			<p className="text-white animate-pulse text-center mt-10">
 				Chargement en cours...
@@ -170,60 +168,64 @@ export default function ParticipationsByChallenge() {
 
 	return (
 		<section className="p-2">
-			{error && <ErrorSummary errors={{ server: error }} />}
-			<H1Title size="h1-mobile">
-				Participations au challenge : {challenge?.name}
-			</H1Title>
+			
+			{error.server && <ErrorSummary errors={error} />}
 
-			<div className="grid grid-cols-1 gap-6 w-[90%] max-w-[370px] mx-auto md:grid-cols-2 md:max-w-[600px] md:gap-12 lg:grid-cols-3 lg:max-w-[1200px]">
-				{hasParticipation ? (
-					currentParticipations.map((p) => (
-						<div key={p.id} className="flex flex-col gap-2">
-							<div className="border border-green-light rounded-lg overflow-hidden relative aspect-video w-full">
-								<ReactPlayer
-									src={p.url}
-									controls
-									width="100%"
-									height="100%"
-									className="absolute top-0 left-0"
-								/>
-							</div>
-							<div className="flex flex-col items-center text-p-mobile md:text-p-tablet text-white mt-1">
-								<div className="flex items-center gap-2">
-									<span>{p.voteCounted || 0}</span>
-									{loadingUser ? (
-										<FaHeart className="text-gray-400 animate-pulse" />
-									) : userInfo ? (
-										<FaHeart
-											className={`cursor-pointer text-[18px] ${votes[p.id] ? "text-red-500" : "text-white"}`}
-											onClick={() => !loadingVote[p.id] && handleVote(p.id)}
+			{challenge && (
+				<>
+					<H1Title>Participations au challenge : {challenge.name}</H1Title>
+
+					<div className="grid grid-cols-1 gap-6 w-[90%] max-w-[370px] mx-auto md:grid-cols-2 md:max-w-[600px] md:gap-12 lg:grid-cols-3 lg:max-w-[1200px]">
+						{hasParticipation ? (
+							currentParticipations.map((p) => (
+								<div key={p.id} className="flex flex-col gap-2">
+									<div className="border border-green-light rounded-lg overflow-hidden relative aspect-video w-full">
+										<ReactPlayer
+											src={p.url}
+											controls
+											width="100%"
+											height="100%"
+											className="absolute top-0 left-0"
 										/>
-									) : (
-										<FaHeart
-											className="text-gray-400"
-											title="Connectez-vous pour voter"
-										/>
-									)}
+									</div>
+									<div className="flex flex-col items-center text-p-mobile md:text-p-tablet text-white mt-1">
+										<div className="flex items-center gap-2">
+											<span>{p.voteCounted || 0}</span>
+											{loadingUser ? (
+												<FaHeart className="text-gray-400 animate-pulse" />
+											) : userInfo ? (
+												<FaHeart
+													className={`cursor-pointer text-[18px] ${votes[p.id] ? "text-red-500" : "text-white"}`}
+													onClick={() => !loadingVote[p.id] && handleVote(p.id)}
+												/>
+											) : (
+												<FaHeart
+													className="text-gray-400"
+													title="Connectez-vous pour voter"
+												/>
+											)}
+										</div>
+										{voteErrors[p.id] && (
+											<ErrorSummary errors={{ server: voteErrors[p.id] }} />
+										)}
+									</div>
 								</div>
-								{voteErrors[p.id] && (
-									<ErrorSummary errors={{ vote: voteErrors[p.id] }} />
-								)}
+							))
+						) : (
+							<div className="col-span-full flex justify-center text-white mt-4 opacity-50">
+								<p>Il n'y a aucune participation actuellement à ce challenge.</p>
 							</div>
-						</div>
-					))
-				) : (
-					<div className="col-span-full flex justify-center text-white mt-4 opacity-50">
-						<p>Il n'y a aucune participation actuellement à ce challenge.</p>
+						)}
 					</div>
-				)}
-			</div>
 
-			{totalPages > 1 && (
-				<Pagination
-					currentPage={currentPage}
-					totalPages={totalPages}
-					onPageChange={(page) => setCurrentPage(page)}
-				/>
+					{totalPages > 1 && (
+						<Pagination
+							currentPage={currentPage}
+							totalPages={totalPages}
+							onPageChange={(page) => setCurrentPage(page)}
+						/>
+					)}
+				</>
 			)}
 		</section>
 	);
