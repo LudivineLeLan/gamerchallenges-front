@@ -59,3 +59,13 @@ export type ApiErrorResponse = {
 export type FormAuthProps = {
   mode: "login" | "register";
 };
+
+export type ProfileFormData = {
+  username: string;
+  email: string;
+  favouriteGame: string;
+  twitch: string;
+  youtube: string;
+  discord: string;
+  avatar: File | null;
+};
