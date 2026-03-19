@@ -6,20 +6,12 @@ import { Link } from "react-router-dom";
 import Button from "../../ui/Button";
 import type { ApiErrorResponse } from "../../types/forms";
 import ErrorSummary from "../../ui/ErrorSummary";
-
-type RankingUser = {
-    id: number;
-    username: string;
-    avatar: string;
-    participationCount?: number;
-    voteCount?: number;
-};
+import type { RankingUser } from "../../types/ranking";
 
 export default function Ranking() {
     const [topParticipations, setTopParticipations] = useState<RankingUser[]>([]);
     const [topVotes, setTopVotes] = useState<RankingUser[]>([]);
     const [loading, setLoading] = useState(true);
-    // 1. Changement du type de l'erreur
     const [error, setError] = useState<Partial<ApiErrorResponse>>({});
 
     const API_URL = import.meta.env.VITE_API_URL;
