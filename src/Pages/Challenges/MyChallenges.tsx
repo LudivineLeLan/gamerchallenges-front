@@ -1,163 +1,242 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { SiTwitch, SiYoutube, SiDiscord } from "react-icons/si";
-import H1Title from "../../ui/H1Title";
-import H2 from "../../ui/H2";
-import Button from "../../ui/Button";
+import { useState, useEffect, useContext } from "react";
+import { Icon } from "@iconify/react";
 import Pagination from "../../ui/Pagination";
-import type { Participation } from "../../types/models";
 import { useAuth } from "../../hooks/useAuth";
-import type { ApiErrorResponse } from "../../types/forms";
-import ErrorSummary from "../../ui/ErrorSummary";
+import { AuthContext } from "../../Context/AuthContext";
 
-export default function MyChallenges() {
-  // useAuth to get current user
-  const { userInfo } = useAuth();
+type ParticipationChallenge = {
+	id: number;
+	name?: string;
+	title?: string;
+};
 
-  const API_URL = import.meta.env.VITE_API_URL;
+type Participation = {
+	id: number;
+	video?: string;
+	video_url?: string;
+	challenge?: ParticipationChallenge;
+	Challenge?: ParticipationChallenge;
+};
 
-  // STATES INITIALIZATION
-  const [myParticipations, setMyParticipations] = useState<Participation[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 9;
-  const [errors, setErrors] = useState<Partial<ApiErrorResponse>>({});
+function getYoutubeEmbedUrl(url?: string) {
+	if (!url) return "";
 
-  useEffect(() => {
-    // get participations of the current user by fetching
-    if (!userInfo) return;
+	try {
+		const parsedUrl = new URL(url);
 
-    // Empty error before new request
-    setErrors({});
+		if (parsedUrl.hostname.includes("youtube.com")) {
+			const videoId = parsedUrl.searchParams.get("v");
+			return videoId ? `https://www.youtube.com/embed/${videoId}` : "";
+		}
 
-    fetch(`${API_URL}/users/${userInfo.id}/participations`)
-      .then((res) => {
-        // If there is an error we sent back error from back
-        if (!res.ok) {
-          return res.json().then((data) => {
-            throw data;
-          });
-        }
-        return res.json();
-      })
-      .then((data) => {
-        setMyParticipations(data);
-        console.log("Participations récupérées :", data);
-      })
-      .catch((err: any) => {
-        console.error("Erreur récupération participations :", err);
-        // Update errors
-        setErrors({
-          server: err.error || "Impossible de charger vos participations.",
-          statusCode: err.status || 500,
-        });
-      });
-  }, [userInfo, API_URL]);
+		if (parsedUrl.hostname.includes("youtu.be")) {
+			const videoId = parsedUrl.pathname.slice(1);
+			return videoId ? `https://www.youtube.com/embed/${videoId}` : "";
+		}
 
-  //  PAGINATION
-  const totalPages = Math.ceil(myParticipations.length / pageSize);
-  const startIndex = (currentPage - 1) * pageSize;
-  const currentParticipations = myParticipations.slice(
-    startIndex,
-    startIndex + pageSize,
-  );
+		return "";
+	} catch {
+		return "";
+	}
+}
 
-  return (
-    <section className="px-4 py-6 md:mx-10 lg:mx-10">
-      {/* Show errors */}
-      <ErrorSummary errors={errors} />
+export default function MyProfile() {
+	const { token } = useContext(AuthContext);
+	const { userInfo, loadingUser } = useAuth();
 
-      <div className="flex flex-col items-center bg-linear-to-b from-green-dark to-blue-dark p-8 rounded-lg border-4 border-green-light w-full mb-10 lg:w-4/5 mx-auto">
-        {/* User info header */}
-        <p className="text-white text-3xl font-bold mb-2">
-          {userInfo?.username || "Utilisateur"}
-        </p>
+	const [participations, setParticipations] = useState<Participation[]>([]);
+	const [loadingParticipations, setLoadingParticipations] = useState(false);
+	const [error, setError] = useState("");
 
-        <div className="flex flex-row items-center justify-center gap-6 mb-6 md:gap-12 lg:gap-30">
-          <div className="flex flex-col items-center justify-center w-32 h-14 md:w-40 md:h-20 lg:w-48 lg:h-24 rounded-3xl bg-black-dark/80 border-3 border-green-light text-green-light font-bold shadow-lg">
-            <span className="text-lg md:text-2xl lg:text-3xl">20</span>
-            <span className="text-[0.65rem] md:text-sm lg:text-base">
-              ME SUIVENT
-            </span>
-          </div>
+	const [currentPage, setCurrentPage] = useState(1);
+	const pageSize = 3;
 
-          {/* Dynamic avatar via userInfo */}
-          <img
-            src={userInfo?.avatar || "/default-avatar.png"} // fallback si pas d'avatar
-            alt={userInfo?.username || "avatar par défaut"}
-            className="w-25 h-25 md:w-32 md:h-32 lg:w-60 lg:h-60 rounded-full object-cover"
-          />
+	useEffect(() => {
+		if (!userInfo?.id || !token) return;
 
-          <div className="flex flex-col items-center justify-center w-32 h-14 md:w-40 md:h-20 lg:w-48 lg:h-24 rounded-3xl bg-black-dark/80 border-3 border-green-light text-green-light font-bold shadow-lg">
-            <span className="text-lg md:text-2xl lg:text-3xl">45</span>
-            <span className="text-[0.65rem] md:text-sm lg:text-base">
-              JE FOLLOW
-            </span>
-          </div>
-        </div>
+		const fetchParticipations = async () => {
+			try {
+				setLoadingParticipations(true);
+				setError("");
 
-        {/* Social links */}
-        <div className="flex justify-center gap-4 mb-12 lg:gap-10">
-          <a
-            href="#twitch"
-            className="text-green-light hover:text-white transition-colors duration-300">
-            <SiTwitch className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" />
-          </a>
-          <a
-            href="#youtube"
-            className="text-green-light hover:text-white transition-colors duration-300">
-            <SiYoutube className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" />
-          </a>
-          <a
-            href="#discord"
-            className="text-green-light hover:text-white transition-colors duration-300">
-            <SiDiscord className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" />
-          </a>
-        </div>
+				const response = await fetch(
+					`${import.meta.env.VITE_API_URL}/users/${userInfo.id}/participations`,
+					{
+						headers: {
+							Authorization: `Bearer ${token}`,
+						},
+					},
+				);
 
-        <H1Title>Mes Challenges</H1Title>
+				if (!response.ok) {
+					throw new Error(`HTTP error ${response.status}`);
+				}
 
-        {/* Show message if there are no participations yet */}
-        {errors.server && myParticipations.length === 0 ? (
-          <p className="text-center text-white opacity-50 mt-4">
-            Aucune participation à afficher.
-          </p>
-        ) : (
-          <div className="grid grid-cols-3 gap-10 justify-items-center mt-4">
-            {currentParticipations.map((p) => (
-              <article
-                key={p.id}
-                className="flex flex-col items-center justify-between cursor-pointer bg-black-dark/60 border-2 border-green-light rounded-lg p-1 w-25 h-40 md:w-50 md:h-75 lg:w-70 lg:h-80"
-                onClick={() => window.open(p.url, "_blank")}>
-                <img
-                  src={p.challenge?.game?.cover}
-                  alt={p.challenge?.game?.title}
-                  className="w-25 h-20 md:w-40 md:h-40 lg:w-60 lg:h-40 lg:mt-2 rounded-md object-cover border-2 border-green-light transition-transform duration-300 ease-out hover:scale-105 hover:shadow-xl"
-                />
-                <p className="text-white text-center mt-1 leading-tight mb-2 text-[0.65rem] md:text-p-tablet lg:text-2xl">
-                  {p.challenge?.name}
-                </p>
-                <p className="bg-green-light text-white text-center px-2 py-1 rounded-full text-[0.5rem] w-fit hover:bg-white hover:text-green-light hover:border-green-light hover:border-2 md:text-p-tablet md:mb-1 lg:text-2xl">
-                  {p.title}
-                </p>
-              </article>
-            ))}
-          </div>
-        )}
+				const data = await response.json();
+				console.log("participations:", data);
 
-        <div className="mt-10">
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-          />
-        </div>
-      </div>
+				const participationsList = Array.isArray(data)
+					? data
+					: data.participations || [];
 
-      <div className="flex justify-center mt-10 w-full">
-        <Link to="/">
-          <Button label="Retour à l'accueil" type="button" />
-        </Link>
-      </div>
-    </section>
-  );
+				setParticipations(participationsList);
+			} catch (err) {
+				console.error("Erreur récupération participations :", err);
+				setError("Impossible de récupérer les participations.");
+			} finally {
+				setLoadingParticipations(false);
+			}
+		};
+
+		fetchParticipations();
+	}, [userInfo?.id, token]);
+
+	if (loadingUser) {
+		return <p className="mt-10 text-center text-white">Chargement...</p>;
+	}
+
+	if (!userInfo) {
+		return (
+			<p className="mt-10 text-center text-white">
+				Utilisateur introuvable.
+			</p>
+		);
+	}
+
+	const totalPages = Math.ceil(participations.length / pageSize);
+	const startIndex = (currentPage - 1) * pageSize;
+	const currentParticipations = participations.slice(
+		startIndex,
+		startIndex + pageSize,
+	);
+
+	return (
+		<div className="min-h-screen w-full bg-[radial-gradient(circle_at_50%_20%,rgba(0,100,0,0.35)_0%,rgba(0,40,0,0.2)_40%,#001c22_100%),linear-gradient(to_bottom,#1a4c0e,#001c22)] bg-fixed bg-no-repeat px-4 py-8 text-white">
+			<div className="mx-auto flex w-full max-w-5xl justify-center">
+				<div className="w-full rounded-[2.2rem] border-4 border-green-light bg-linear-to-t from-green-dark to-blue-dark px-4 py-6 shadow-[0_0_30px_rgba(85,204,3,0.18)] sm:px-8 sm:py-8 lg:px-12 lg:py-10">
+					<div className="flex flex-col items-center gap-6">
+						<div className="flex flex-col items-center">
+							<h1 className="mb-2 text-[1.75rem] font-extrabold uppercase tracking-wide text-white">
+								{userInfo.username}
+							</h1>
+
+							<div className="flex h-27.5 w-27.5 items-center justify-center overflow-hidden rounded-full border-4 border-green-light bg-green-light shadow-[0_0_20px_rgba(57,255,20,0.9)]">
+								<img
+									src={userInfo.avatar || "/images/avatar-bob.png"}
+									alt={userInfo.username}
+									className="h-full w-full object-cover"
+								/>
+							</div>
+						</div>
+
+						<div className="mt-1 flex items-center justify-center gap-7 text-green-light">
+							{userInfo.twitch && (
+								<a
+									href={userInfo.twitch}
+									target="_blank"
+									rel="noopener noreferrer"
+									aria-label="Twitch"
+									className="transition hover:scale-110"
+								>
+									<Icon icon="mdi:twitch" className="text-[2rem]" />
+								</a>
+							)}
+
+							{userInfo.youtube && (
+								<a
+									href={userInfo.youtube}
+									target="_blank"
+									rel="noopener noreferrer"
+									aria-label="YouTube"
+									className="transition hover:scale-110"
+								>
+									<Icon icon="mdi:youtube" className="text-[2rem]" />
+								</a>
+							)}
+
+							{userInfo.discord && (
+								<a
+									href={userInfo.discord}
+									target="_blank"
+									rel="noopener noreferrer"
+									aria-label="Discord"
+									className="transition hover:scale-110"
+								>
+									<Icon icon="ic:baseline-discord" className="text-[2rem]" />
+								</a>
+							)}
+						</div>
+
+						<div className="mt-1 flex w-full flex-col items-center">
+							<h2 className="mb-4 text-center text-[1.5rem] font-bold italic text-white">
+								Mes participations
+							</h2>
+
+							<div className="mb-10 h-1.5 w-full max-w-130 rounded-full bg-green-light shadow-[0_0_14px_3px_rgba(57,255,20,0.9)]" />
+
+							{loadingParticipations ? (
+								<p>Chargement...</p>
+							) : error ? (
+								<p className="text-red-medium">{error}</p>
+							) : currentParticipations.length === 0 ? (
+								<p>Aucune participation trouvée.</p>
+							) : (
+								<>
+									<div className="grid w-full max-w-245 grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+										{currentParticipations.map((participation) => {
+											const challenge =
+												participation.challenge || participation.Challenge;
+
+											const title =
+												challenge?.name ||
+												challenge?.title ||
+												"Participation";
+
+											const youtubeUrl =
+												participation.video || participation.video_url;
+
+											const embedUrl = getYoutubeEmbedUrl(youtubeUrl);
+
+											return (
+												<article
+													key={participation.id}
+													className="mx-auto flex w-41.25 flex-col items-center rounded-[1.9rem] border-4 border-green-light bg-[rgba(17,40,16,0.45)] px-2 py-3"
+												>
+													<div className="h-24 w-full overflow-hidden rounded-2xl border-[3px] border-green-light bg-black">
+														{embedUrl ? (
+															<iframe
+																src={embedUrl}
+																title={title}
+																allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+																allowFullScreen
+																className="h-full w-full"
+															/>
+														) : (
+															<div className="flex h-full w-full items-center justify-center text-center text-xs text-white">
+																Aucune vidéo disponible
+															</div>
+														)}
+													</div>
+
+													<p className="mt-3 text-center text-[0.95rem] font-extrabold text-white">
+														{title}
+													</p>
+												</article>
+											);
+										})}
+									</div>
+
+									<Pagination
+										currentPage={currentPage}
+										totalPages={totalPages}
+										onPageChange={setCurrentPage}
+									/>
+								</>
+							)}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
 }

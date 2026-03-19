@@ -305,7 +305,7 @@ export default function MyAccount() {
       </div>
 
       <div className="mt-8 flex justify-center">
-        <Link to="/">
+        <Link to="/mon-profil">
           <Button label="Retour" type="button" />
         </Link>
       </div>
