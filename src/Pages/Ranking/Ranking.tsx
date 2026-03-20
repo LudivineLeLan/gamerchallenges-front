@@ -75,8 +75,8 @@ export default function Ranking() {
         className={`
                 w-full border-3 border-green-medium rounded-3xl
                 flex flex-col items-center gap-2 text-center
-                shadow-md hover:shadow-lg transition-shadow bg-[var(--color-blue-dark)] text-white
-                ${isFirst ? "max-w-[28rem] p-6 scale-105 md:scale-110" : "max-w-[20rem] p-4"} 
+                shadow-md hover:shadow-lg transition-shadow bg-blue-dark text-white
+                ${isFirst ? "max-w-md p-6 scale-105 md:scale-110" : "max-w-[20rem] p-4"} 
 `}>
         <div className="relative">
           <div className="absolute inset-0 top-0 bottom-0 left-1/2 transform -translate-x-1/2 bg-green-light opacity-20 rounded-full blur-3xl"></div>
@@ -94,7 +94,7 @@ export default function Ranking() {
           </span>
         ) : (
           <span className="font-bold">
-            {user.participationCount} participation(s)
+            {user.participationCount} participations
           </span>
         )}
       </li>
