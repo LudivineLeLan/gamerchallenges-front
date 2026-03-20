@@ -5,7 +5,6 @@ import Games from "./Pages/Games/Games";
 import GameDetails from "./Pages/Games/GameDetails";
 import Challenges from "./Pages/Challenges/Challenges";
 import ChallengeDetails from "./Pages/Challenges/ChallengeDetails";
-import MyChallenges from "./Pages/Challenges/MyChallenges";
 import About from "./Pages/About/About";
 import Contact from "./Pages/Contact/Contact";
 import Legal from "./Pages/Legal/Legal";
@@ -49,7 +48,6 @@ export default function App() {
             )}
             <Route path="/mon-compte" element={<MyAccount />} />
             <Route path="/mon-profil" element={<MyProfile />} />
-            <Route path="/mes-challenges" element={<MyChallenges />} />
             <Route path="/classement" element={<Ranking />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/a-propos" element={<About />} />

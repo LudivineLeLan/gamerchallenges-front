@@ -1,21 +1,10 @@
 import { useState, useEffect, useContext } from "react";
 import { Icon } from "@iconify/react";
+import { Link } from "react-router-dom";
 import Pagination from "../../ui/Pagination";
 import { useAuth } from "../../hooks/useAuth";
 import { AuthContext } from "../../Context/AuthContext";
-import { Link } from "react-router-dom";
-
-
-type Participation = {
-	id: number;
-	url?: string;
-	video?: string;
-	video_url?: string;
-	videoUrl?: string;
-	youtube?: string;
-	youtube_url?: string;
-	youtubeUrl?: string;
-};
+import type { Participation } from "../../types/models";
 
 function getYoutubeEmbedUrl(url?: string) {
 	if (!url) return "";
@@ -45,19 +34,6 @@ function getYoutubeEmbedUrl(url?: string) {
 	}
 }
 
-function getParticipationVideoUrl(participation: Participation) {
-	return (
-		participation.url ||
-		participation.video ||
-		participation.video_url ||
-		participation.videoUrl ||
-		participation.youtube ||
-		participation.youtube_url ||
-		participation.youtubeUrl ||
-		""
-	);
-}
-
 export default function MyProfile() {
 	const { token } = useContext(AuthContext);
 	const { userInfo, loadingUser } = useAuth();
@@ -82,8 +58,8 @@ export default function MyProfile() {
 					{
 						headers: token
 							? {
-								Authorization: `Bearer ${token}`,
-							}
+									Authorization: `Bearer ${token}`,
+							  }
 							: {},
 					},
 				);
@@ -140,13 +116,14 @@ export default function MyProfile() {
 							{userInfo.username}
 						</h1>
 
-						<div className="h-28 w-28 overflow-hidden rounded-full border-4 border-green-light shadow-[0_0_20px_rgba(57,255,20,0.9)]">
+						<div className="h-35 w-35 overflow-hidden rounded-full border-4 border-green-light shadow-[0_0_20px_rgba(57,255,20,0.9)]">
 							<img
 								src={userInfo.avatar || "/images/avatar-bob.png"}
 								alt={userInfo.username}
 								className="h-full w-full object-cover"
 							/>
 						</div>
+
 						<div className="mt-4">
 							<Link to="/mon-compte">
 								<button className="rounded-full border-2 border-green-light bg-green-light px-5 py-2 text-sm font-bold text-white transition hover:brightness-110 hover:text-black">
@@ -158,17 +135,17 @@ export default function MyProfile() {
 						<div className="flex gap-6 text-green-light">
 							{userInfo.twitch && (
 								<a href={userInfo.twitch} target="_blank" rel="noopener noreferrer">
-									<Icon icon="mdi:twitch" className="text-2xl" />
+									<Icon icon="mdi:twitch" className="text-3xl" />
 								</a>
 							)}
 							{userInfo.youtube && (
 								<a href={userInfo.youtube} target="_blank" rel="noopener noreferrer">
-									<Icon icon="mdi:youtube" className="text-2xl" />
+									<Icon icon="mdi:youtube" className="text-3xl" />
 								</a>
 							)}
 							{userInfo.discord && (
 								<a href={userInfo.discord} target="_blank" rel="noopener noreferrer">
-									<Icon icon="ic:baseline-discord" className="text-2xl" />
+									<Icon icon="ic:baseline-discord" className="text-3xl" />
 								</a>
 							)}
 						</div>
@@ -184,8 +161,7 @@ export default function MyProfile() {
 						<>
 							<div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
 								{currentParticipations.map((participation) => {
-									const rawUrl = getParticipationVideoUrl(participation);
-									const embedUrl = getYoutubeEmbedUrl(rawUrl);
+									const embedUrl = getYoutubeEmbedUrl(participation.url);
 
 									return (
 										<div
