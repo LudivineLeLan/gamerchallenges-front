@@ -1,26 +1,35 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import H1Title from "../../ui/H1Title";
 import TitleImage from "../../assets/images/Title.png";
 import backgroundImage from "../../assets/images/draw_team.png";
 import Button from "../../ui/Button";
 import type { ApiErrorResponse } from "../../types/forms";
-import type { Participation } from "../../types/models";
 import ErrorSummary from "../../ui/ErrorSummary";
 import Image from "../../ui/Image";
 
+type TopChallenge = {
+  id: number;
+  name: string;
+  participationCount?: number;
+  game?: {
+    id: number;
+    title: string;
+    cover: string;
+  };
+};
+
 export default function Home() {
-  const [bestParticipations, setBestParticipations] = useState<Participation[]>([]);
+  const [bestChallenges, setBestChallenges] = useState<TopChallenge[]>([]);
   const [error, setError] = useState<Partial<ApiErrorResponse>>({});
 
   const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
-    // Clear errors
     setError({});
 
-    fetch(`${API_URL}/`)
+    fetch(`${API_URL}/challenges/top`)
       .then((res) => {
-        // If request fails, catch error and throw it
         if (!res.ok) {
           return res.json().then((data) => {
             throw data;
@@ -29,15 +38,14 @@ export default function Home() {
         return res.json();
       })
       .then((data) => {
-        setBestParticipations(data);
+        setBestChallenges(data);
       })
       .catch((err: any) => {
-        console.error("Error fetching best participations:", err);
-        
-        // Update errors state
+        console.error("Error fetching top challenges:", err);
+
         setError({
           statusCode: err.status || 500,
-          server: err.error || "Impossible de charger les meilleures vidéos."
+          server: err.error || err.message || "Impossible de charger les meilleurs challenges.",
         });
       });
   }, [API_URL]);
@@ -50,7 +58,6 @@ export default function Home() {
           md:grid md:grid-cols-2 md:gap-6
         "
       >
-        {/* Using standard img tags for layout assets to avoid custom Image borders */}
         <img
           src={TitleImage}
           alt="Title"
@@ -66,40 +73,51 @@ export default function Home() {
           "
         />
       </div>
-      
-      <section className="text-center px-6 py-12">
-        <H1Title>Les vidéos les plus likées</H1Title>
 
-        {/* SHOW ERRORS */}
+      <section className="text-center px-6 py-12">
+        <H1Title>Top 3 Challenges</H1Title>
+
         <div className="max-w-6xl mx-auto mb-6">
-           <ErrorSummary errors={error} />
+          <ErrorSummary errors={error} />
         </div>
 
-        {/* Dynamic display */}
-        {error.server && bestParticipations.length === 0 ? (
-           <p className="text-center text-white mt-10 opacity-50">Aucune vidéo à afficher pour le moment.</p>
+        {error.server && bestChallenges.length === 0 ? (
+          <p className="text-center text-white mt-10 opacity-50">
+            Aucun challenge à afficher pour le moment.
+          </p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-10 justify-items-center max-w-6xl mx-auto">
-            {bestParticipations.map((p) => (
+            {bestChallenges.map((challenge) => (
               <article
-                key={p.id}
+                key={challenge.id}
                 className="
                   flex flex-col items-center justify-start
-                  bg-green-light/20 
-                  rounded-lg p-3 
+                  bg-green-light/20
+                  rounded-lg p-3
                   w-48 sm:w-56 lg:w-64
                   transition-transform duration-300 ease-out hover:scale-105 hover:shadow-xl
                 "
               >
-                <a href={p.url} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center">
+                <Link
+                  to={`/challenges/${challenge.id}`}
+                  className="flex flex-col items-center"
+                >
                   <Image
-                    src={p.challenge?.game?.cover}
-                    alt={p.challenge?.game?.title}
+                    src={challenge.game?.cover}
+                    alt={challenge.game?.title || challenge.name}
                   />
-                </a>
+                </Link>
 
                 <p className="text-white font-medium text-center mt-3">
-                  {p.challenge?.name}
+                  {challenge.name}
+                </p>
+
+                <p className="text-white/70 text-sm mt-1 text-center">
+                  {challenge.game?.title}
+                </p>
+
+                <p className="text-white/70 text-xs mt-1 text-center">
+                  {Number(challenge.participationCount || 0)} participations
                 </p>
               </article>
             ))}
