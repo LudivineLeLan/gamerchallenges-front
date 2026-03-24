@@ -18,7 +18,7 @@ export default function MyAccount() {
   const { token } = useContext(AuthContext);
 
   // Get user profile data from useAuth hook (fetches from /me endpoint)
-  const { userInfo, loadingUser, refreshUser } = useAuth();
+  const { userInfo, loadingUser, refreshUser, logout } = useAuth();
 
   const [form, setForm] = useState<ProfileFormData>({
     username: "",
@@ -136,7 +136,7 @@ export default function MyAccount() {
 
     try {
       setIsDeleting(true);
-      setError({}); 
+      setError({});
 
       const response = await fetch(`${import.meta.env.VITE_API_URL}/me`, {
         method: "DELETE",
@@ -147,6 +147,8 @@ export default function MyAccount() {
         const errorData = await response.json();
         throw errorData;
       }
+
+      logout();
 
       setSuccessMessage("Votre compte a été supprimé avec succès !");
       setTimeout(() => navigate("/"), 2000);
@@ -201,7 +203,7 @@ export default function MyAccount() {
 
   return (
     <div className="flex flex-col items-center px-4 py-10">
-      
+
       <SuccessMessage success={successMessage} />
       <ErrorSummary errors={error} />
 
