@@ -12,4 +12,5 @@ export type InputProps = {
 	name?: string;
 	width?: string;
 	readOnly?: boolean;
+	disabled?: boolean;
 };
