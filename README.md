@@ -2,7 +2,7 @@
 
 ## Présentation
 Le frontend constitue l’interface utilisateur de l’application. Il permet d’afficher les données et
-d’interagir avec l’API backend que vous trouverez ici : https://github.com/MathieuBourasseau/gamerchallenges-back
+d’interagir avec l’API backend que vous trouverez ici : https://github.com/LudivineLeLan/gamerchallenges-back
 
 ## Technologies utilisées
 - React
