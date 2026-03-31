@@ -8,10 +8,7 @@ import { AuthContext } from "../../Context/AuthContext";
  * Helper function to render the component with a mocked AuthContext.
  * This avoids repeating the Provider wrapper in every test.
  */
-function renderWithAuth(
-	ui: React.ReactElement,
-	{ _token = "fake-token", onClose = vi.fn() } = {},
-) {
+function renderWithAuth(ui: React.ReactElement, { onClose = vi.fn() } = {}) {
 	return {
 		onClose,
 		...render(

@@ -1,12 +1,7 @@
+import type { HTMLInputTypeAttribute } from "react";
+
 export type InputProps = {
-	type?:
-		| "text"
-		| "email"
-		| "checkbox"
-		| "password"
-		| "url"
-		| "number"
-		| "search";
+	type?: HTMLInputTypeAttribute;
 	isTextArea?: boolean;
 	placeholder?: string;
 	onChange: (
@@ -16,5 +11,5 @@ export type InputProps = {
 	value?: string;
 	name?: string;
 	width?: string;
-	readonly?: boolean;
+	readOnly?: boolean;
 };
