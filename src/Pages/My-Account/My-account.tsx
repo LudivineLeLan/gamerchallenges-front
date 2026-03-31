@@ -165,9 +165,10 @@ export default function MyAccount() {
   };
 
   // writting fields form
+  type EditableField = Exclude<keyof ProfileFormData, "avatar">;
   const renderField = (
     label: string,
-    name: keyof ProfileFormData,
+    name: EditableField,
     type: React.HTMLInputTypeAttribute = "text",
   ) => {
     const isEditing = editingField === name;
