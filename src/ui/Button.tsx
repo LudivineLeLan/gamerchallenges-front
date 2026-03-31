@@ -12,6 +12,7 @@ type ButtonProps = {
   margin?: string;
   width?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  disabled?: boolean;
 };
 
 export default function Button({
@@ -26,6 +27,7 @@ export default function Button({
   margin = "",
   width = "w-auto", // largeur auto pour que le bouton s'adapte au texte
   onClick,
+  disabled,
 }: ButtonProps) {
   return (
     <button
@@ -43,7 +45,8 @@ export default function Button({
         ${className || ""}
       `}
       type={type}
-      onClick={onClick}>
+      onClick={onClick}
+        disabled={disabled}>
       {label}
     </button>
   );
